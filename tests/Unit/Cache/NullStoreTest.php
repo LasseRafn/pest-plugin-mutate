@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Pest\Mutate\Cache\NullStore;
 
 beforeEach(function (): void {
-    $this->cache = new NullStore();
+    $this->cache = new NullStore;
     $this->key = 'my-key';
 });
 

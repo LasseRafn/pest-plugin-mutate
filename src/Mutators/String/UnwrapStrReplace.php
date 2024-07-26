@@ -6,6 +6,7 @@ namespace Pest\Mutate\Mutators\String;
 
 use Pest\Mutate\Mutators\Abstract\AbstractFunctionCallUnwrapMutator;
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 
 class UnwrapStrReplace extends AbstractFunctionCallUnwrapMutator
 {
@@ -25,7 +26,7 @@ class UnwrapStrReplace extends AbstractFunctionCallUnwrapMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\FuncCall $node */
+        /** @var FuncCall $node */
         return $node->args[2]->value; // @phpstan-ignore-line
     }
 }

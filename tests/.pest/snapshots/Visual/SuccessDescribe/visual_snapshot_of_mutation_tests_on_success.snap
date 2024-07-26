@@ -1,0 +1,11 @@
+
+  Running initial test suite:  
+
+  ....
+
+  Tests:    4 passed (4 assertions)
+  Duration: xxx
+
+
+  [39;41;1m ERROR [39;49;22m [39mNo coverage report found, aborting mutation testing.[39m
+

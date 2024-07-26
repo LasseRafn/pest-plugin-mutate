@@ -27,8 +27,7 @@ class PostDecrementToPostIncrement extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\PostDec $node */
-
+        /** @var PostDec $node */
         return new PostInc($node->var, $node->getAttributes());
     }
 }

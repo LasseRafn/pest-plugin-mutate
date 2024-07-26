@@ -41,7 +41,7 @@ class MutationTestRunner implements MutationTestRunnerContract
 
     public static function fake(): MutationTestRunnerFake
     {
-        $fake = new MutationTestRunnerFake();
+        $fake = new MutationTestRunnerFake;
 
         Container::getInstance()->add(MutationTestRunnerContract::class, $fake);
 
@@ -94,8 +94,8 @@ class MutationTestRunner implements MutationTestRunnerContract
         $start = microtime(true);
 
         if (! file_exists($reportPath = Coverage::getPath())) {
-            // TODO: maybe we can run without a coverage report, but it is really in performant
             Container::getInstance()->get(Printer::class)->reportError('No coverage report found, aborting mutation testing.'); // @phpstan-ignore-line
+
             exit(1);
         }
 
@@ -107,6 +107,7 @@ class MutationTestRunner implements MutationTestRunnerContract
 
         /** @var CodeCoverage $codeCoverage */
         $codeCoverage = require $reportPath;
+
         unlink($reportPath);
         $coveredLines = array_map(fn (array $lines): array => array_filter($lines, fn (array $tests): bool => $tests !== []), $codeCoverage->getData()->lineCoverage());
         $coveredLines = array_filter($coveredLines, fn (array $lines): bool => $lines !== []);
@@ -115,9 +116,12 @@ class MutationTestRunner implements MutationTestRunnerContract
 
         /** @var MutationGenerator $generator */
         $generator = Container::getInstance()->get(MutationGenerator::class);
+
         foreach ($files as $file) {
             $linesToMutate = [];
+
             if ($this->getConfiguration()->coveredOnly) {
+
                 if (! isset($coveredLines[$file->getRealPath()])) {
                     continue;
                 }

@@ -45,7 +45,7 @@ class NotEmptyStringToEmpty extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Scalar\String_ $node */
+        /** @var String_ $node */
         $node->value = '';
 
         return $node;

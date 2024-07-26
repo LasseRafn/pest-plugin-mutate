@@ -26,8 +26,7 @@ class RemoveArrayCast extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\Cast\Array_ $node */
-
+        /** @var Array_ $node */
         return $node->expr;
     }
 }

@@ -20,4 +20,4 @@ test('visual snapshot of mutation tests on success', function (): void {
 
     expect($output)
         ->toMatchSnapshot();
-})->todo();
+});

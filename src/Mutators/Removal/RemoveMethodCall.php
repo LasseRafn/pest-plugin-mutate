@@ -41,6 +41,6 @@ class RemoveMethodCall extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        return new Nop();
+        return new Nop;
     }
 }

@@ -30,7 +30,7 @@ class ForAlwaysFalse extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Stmt\For_ $node */
+        /** @var For_ $node */
         $node->cond = [new ConstFetch(new Name('false'))];
 
         return $node;

@@ -56,7 +56,7 @@ class Mutate implements Bootable, HandlesArguments
             StreamWrapper::start(getenv(self::ENV_MUTATION_TESTING), (string) getenv(self::ENV_MUTATION_FILE));
         }
 
-        $this->container->add(MutationTestRunner::class, new \Pest\Mutate\Tester\MutationTestRunner());
+        $this->container->add(MutationTestRunner::class, new \Pest\Mutate\Tester\MutationTestRunner);
 
         foreach (self::BOOTSTRAPPERS as $bootstrapper) {
             $bootstrapper = Container::getInstance()->get($bootstrapper);
@@ -65,7 +65,7 @@ class Mutate implements Bootable, HandlesArguments
             $bootstrapper->boot();
         }
 
-        $this->container->add(CacheInterface::class, new FileStore());
+        $this->container->add(CacheInterface::class, new FileStore);
     }
 
     /**

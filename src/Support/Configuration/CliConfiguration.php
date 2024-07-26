@@ -167,7 +167,7 @@ class CliConfiguration extends AbstractConfiguration
         }
 
         if ($input->hasOption(NoCache::ARGUMENT)) {
-            Container::getInstance()->add(CacheInterface::class, new NullStore());
+            Container::getInstance()->add(CacheInterface::class, new NullStore);
         }
 
         if ($input->hasOption(ClearCache::ARGUMENT)) {

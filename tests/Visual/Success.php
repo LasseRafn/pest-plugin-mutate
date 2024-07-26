@@ -10,14 +10,15 @@ test('visual snapshot of mutation tests on success', function (): void {
     $process = (new Process(
         ['php', 'vendor/bin/pest', 'tests/.tests/Success'],
         dirname($testsPath),
+        ['XDEBUG_MODE' => 'coverage'],
     ));
 
     $process->run();
 
     $output = $process->getOutput();
 
-    $output = preg_replace('/Duration: .*/', 'Duration: xxx', $output);
+    $output = preg_replace('/Duration:  .*/', 'Duration:  xxx', $output);
 
     expect($output)
         ->toMatchSnapshot();
-})->todo();
+});

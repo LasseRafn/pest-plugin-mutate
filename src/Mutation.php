@@ -47,7 +47,7 @@ class Mutation
         ?Node $modifiedNode,
         array $modifiedAst,
     ): self {
-        $modifiedSource = (new Standard())->prettyPrintFile($modifiedAst);
+        $modifiedSource = (new Standard)->prettyPrintFile($modifiedAst);
         $modifiedSourcePath = self::TMP_FOLDER.DIRECTORY_SEPARATOR.hash('xxh3', $modifiedSource);
         file_put_contents($modifiedSourcePath, $modifiedSource);
 
@@ -56,7 +56,7 @@ class Mutation
 
         assert($orignalAst !== null);
 
-        $newlyRenderedOriginalSource = (new Standard())->prettyPrintFile($orignalAst);
+        $newlyRenderedOriginalSource = (new Standard)->prettyPrintFile($orignalAst);
 
         $endLine = $originalNode->getEndLine();
 

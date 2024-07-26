@@ -26,8 +26,7 @@ class RemoveStringCast extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\Cast\String_ $node */
-
+        /** @var String_ $node */
         return $node->expr;
     }
 }

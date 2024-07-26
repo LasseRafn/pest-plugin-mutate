@@ -14,7 +14,7 @@ use Tests\Fixtures\Classes\AgeHelper;
 use Tests\Fixtures\Classes\SizeHelper;
 
 beforeEach(function (): void {
-    $this->configuration = new CliConfiguration();
+    $this->configuration = new CliConfiguration;
 });
 
 it('sets the paths if --path argument is passed', function (): void {

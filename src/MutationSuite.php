@@ -21,13 +21,13 @@ class MutationSuite
 
     public function __construct()
     {
-        $this->repository = new MutationRepository();
+        $this->repository = new MutationRepository;
     }
 
     public static function instance(): self
     {
         if (! self::$instance instanceof \Pest\Mutate\MutationSuite) {
-            self::$instance = new MutationSuite();
+            self::$instance = new MutationSuite;
         }
 
         return self::$instance;
