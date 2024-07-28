@@ -53,7 +53,7 @@ class StringSet implements MutatorSet
             ConcatRemoveRight::class,
             ConcatSwitchSides::class,
             EmptyStringToNotEmpty::class,
-            NotEmptyStringToEmpty::class,
+            // NotEmptyStringToEmpty::class,
             StrStartsWithToStrEndsWith::class,
             StrEndsWithToStrStartsWith::class,
             UnwrapChop::class,
