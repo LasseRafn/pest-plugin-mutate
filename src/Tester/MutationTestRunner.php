@@ -93,7 +93,7 @@ class MutationTestRunner implements MutationTestRunnerContract
     {
         $start = microtime(true);
 
-        if (! file_exists($reportPath = Coverage::getPath())) {
+        if (! Coverage::isAvailable() || ! file_exists($reportPath = Coverage::getPath())) {
             Container::getInstance()->get(Printer::class)->reportError('No coverage report found, aborting mutation testing.'); // @phpstan-ignore-line
 
             exit(1);
