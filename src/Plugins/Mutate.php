@@ -10,6 +10,7 @@ use Pest\Contracts\Plugins\HandlesArguments;
 use Pest\Mutate\Boostrappers\BootPhpUnitSubscribers;
 use Pest\Mutate\Boostrappers\BootSubscribers;
 use Pest\Mutate\Cache\FileStore;
+use Pest\Mutate\Cache\NullStore;
 use Pest\Mutate\Contracts\MutationTestRunner;
 use Pest\Mutate\Repositories\ConfigurationRepository;
 use Pest\Mutate\Support\StreamWrapper;
@@ -65,7 +66,7 @@ class Mutate implements Bootable, HandlesArguments
             $bootstrapper->boot();
         }
 
-        $this->container->add(CacheInterface::class, new FileStore);
+        $this->container->add(CacheInterface::class, new NullStore);
     }
 
     /**

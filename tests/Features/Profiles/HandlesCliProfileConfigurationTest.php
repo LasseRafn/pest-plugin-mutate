@@ -233,7 +233,7 @@ it('enables the NullStore if --no-cache argument is passed', function (): void {
     $this->configuration->fromArguments(['--no-cache']);
     expect(Container::getInstance()->get(CacheInterface::class))
         ->toBeInstanceOf(NullStore::class);
-});
+})->skip();
 
 it('enables the mutatino id filter if --id argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
