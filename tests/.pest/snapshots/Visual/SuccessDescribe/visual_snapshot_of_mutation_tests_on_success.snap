@@ -1,11 +1,22 @@
 
-  Running initial test suite:  
-
   ....
 
   Tests:    4 passed (4 assertions)
   Duration: xxx
 
+  Generating mutations ...
+  [90m4 Mutations for 1 Files created[39m
 
-  [39;41;1m ERROR [39;49;22m [39mNo coverage report found, aborting mutation testing.[39m
+  Running mutation tests:
+
+  [39;100;1m RUN [39;49;22m tests/Fixtures/Classes/AgeHelper.php
+  [32;1m✓[39;22m [90mLine 11: GreaterOrEqualToGreater[39m
+  [32;1m✓[39;22m [90mLine 11: GreaterOrEqualToSmaller[39m
+  [32;1m✓[39;22m [90mLine 11: DecrementInteger[39m
+  [32;1m✓[39;22m [90mLine 11: IncrementInteger[39m
+
+
+  [90mMutations:[39m [32;1m4 caught[39;22m
+[39m  [39m[90mScore:[39m[39m     [39m[39m100.00%[39m
+[39m  [39m[90mDuration:[39m[39m  [39m[39m1.13s[39m
 
