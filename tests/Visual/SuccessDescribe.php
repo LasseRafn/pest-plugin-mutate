@@ -14,7 +14,13 @@ test('visual snapshot of mutation tests on success', function (): void {
 
     $process->run();
 
-    $output = $process->getOutput();
+    $output = preg_replace([
+        '#\\x1b[[][^A-Za-z]*[A-Za-z]#',
+        '/(Tests\\\PHPUnit\\\CustomAffixes\\\InvalidTestName)([A-Za-z0-9]*)/',
+    ], [
+        '',
+        '$1',
+    ], $process->getOutput());
 
     $output = preg_replace('/Duration: .*/', 'Duration: xxx', $output);
 

@@ -2,5 +2,5 @@
    INFO  No tests found.
 
 
-  [39;41;1m ERROR [39;49;22m [39mInitial test run has no tests, aborting mutation testing.[39m
+   ERROR  Initial test run has no tests, aborting mutation testing.
 
