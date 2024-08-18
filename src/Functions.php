@@ -22,7 +22,7 @@ if (! function_exists('mutate')) {
             if (! str_ends_with(Backtrace::testFile(), 'Pest.php')) {
                 Container::getInstance()->get(MutationTestRunner::class)->enable(); // @phpstan-ignore-line
 
-                (new BeforeEachCall(TestSuite::getInstance(), Backtrace::testFile(), fn () => null))->only();
+                (new BeforeEachCall(TestSuite::getInstance(), Backtrace::testFile(), fn (): null => null))->only();
             }
         } catch (Throwable) { // @phpstan-ignore-line
             // @ignoreException
