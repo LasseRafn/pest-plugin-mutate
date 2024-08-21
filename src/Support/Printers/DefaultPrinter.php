@@ -103,7 +103,7 @@ class DefaultPrinter implements Printer
 
     public function reportMutationGenerationStarted(MutationSuite $mutationSuite): void
     {
-        $this->output->writeln('  Generating mutations ...');
+        $this->output->writeln('  Re-running test suite for each mutation...');
     }
 
     public function reportMutationGenerationFinished(MutationSuite $mutationSuite): void
@@ -116,10 +116,6 @@ class DefaultPrinter implements Printer
 
     public function reportMutationSuiteStarted(MutationSuite $mutationSuite): void
     {
-        $this->output->writeln([
-            '  Running mutation tests:',
-        ]);
-
         if ($this->compact) {
             $this->output->writeln('');
             $this->output->write('  ');  // ensure proper indentation before compact test output

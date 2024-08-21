@@ -163,7 +163,6 @@ describe('mutation suite', function (): void {
         $this->printer->reportMutationGenerationStarted($this->mutationSuite);
 
         expect($this->out->fetch())
-            ->toContain('Generating mutations')
             ->toMatchSnapshot();
     });
 
@@ -183,8 +182,6 @@ describe('mutation suite', function (): void {
         $this->printer->reportMutationSuiteStarted($this->mutationSuite);
 
         expect($this->out->fetch())
-            ->toContain('Running mutation tests:')
-            ->toEndWith(PHP_EOL)
             ->toMatchSnapshot();
     });
 
@@ -194,9 +191,6 @@ describe('mutation suite', function (): void {
         $this->printer->reportMutationSuiteStarted($this->mutationSuite);
 
         expect($this->out->fetch())
-            ->toContain('Running mutation tests:')
-            ->toContain(PHP_EOL.PHP_EOL)
-            ->toEndWith('  ')
             ->toMatchSnapshot();
     });
 

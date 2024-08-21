@@ -4,10 +4,9 @@
   Tests:    4 passed (4 assertions)
   Duration: xxx
 
-  Generating mutations ...
+  Re-running test suite for each mutation...
   4 Mutations for 1 Files created
 
-  Running mutation tests:
 
    RUN  tests/Fixtures/Classes/AgeHelper.php
   ✓ Line 11: GreaterOrEqualToGreater
