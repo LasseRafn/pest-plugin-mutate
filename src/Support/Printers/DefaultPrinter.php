@@ -202,12 +202,12 @@ class DefaultPrinter implements Printer
 
         if ($test->result() === MutationTestResult::Escaped) {
             $color = 'red';
-            $label = 'ESCAPED';
-            $error = 'Mutant has escaped. Test suite passed without detecting the mutation.';
+            $label = 'UNTESTED';
+            $error = 'Test suite passed without detecting the mutated code.';
         } else {
             $color = 'yellow';
-            $label = 'NOT COVERED';
-            $error = 'Mutant has escaped. Test suite passed without detecting and covering the mutation.';
+            $label = 'UNTESTED';
+            $error = 'Test suite passed without detecting and executing the mutated code.';
         }
 
         $this->output->writeln([

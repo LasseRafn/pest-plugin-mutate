@@ -9,7 +9,6 @@ use Pest\Contracts\Plugins\Bootable;
 use Pest\Contracts\Plugins\HandlesArguments;
 use Pest\Mutate\Boostrappers\BootPhpUnitSubscribers;
 use Pest\Mutate\Boostrappers\BootSubscribers;
-use Pest\Mutate\Cache\FileStore;
 use Pest\Mutate\Cache\NullStore;
 use Pest\Mutate\Contracts\MutationTestRunner;
 use Pest\Mutate\Repositories\ConfigurationRepository;
