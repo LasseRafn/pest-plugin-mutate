@@ -109,7 +109,7 @@ class MutationTestRunner implements MutationTestRunnerContract
         $codeCoverage = require $reportPath;
 
         unlink($reportPath);
-        $coveredLines = array_map(fn (array $lines): array => array_filter($lines, fn (array $tests): bool => $tests !== []), $codeCoverage->getData()->lineCoverage());
+        $coveredLines = array_map(fn (array $lines): array => array_filter($lines, fn (?array $tests): bool => $tests !== [] && $tests !== null), $codeCoverage->getData()->lineCoverage());
         $coveredLines = array_filter($coveredLines, fn (array $lines): bool => $lines !== []);
 
         $files = FileFinder::files($this->getConfiguration()->paths, $this->getConfiguration()->pathsToIgnore);
