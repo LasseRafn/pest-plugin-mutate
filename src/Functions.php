@@ -14,9 +14,11 @@ if (! function_exists('mutate')) {
     // @codeCoverageIgnoreEnd
 
     /**
-     * Returns a factory to configure the mutation testing profile.
+     * Runs the test suite or a single test mutating the given class(es).
+     *
+     * @param array<int, string>|string $classOrPath
      */
-    function mutate(string $profile = 'default'): GlobalConfiguration
+    function mutate(array|string $classOrPath): GlobalConfiguration
     {
         try {
             if (! str_ends_with(Backtrace::testFile(), 'Pest.php')) {
@@ -28,6 +30,24 @@ if (! function_exists('mutate')) {
             // @ignoreException
         }
 
-        return Container::getInstance()->get(ConfigurationRepository::class)->globalConfiguration($profile); // @phpstan-ignore-line
+        $classesOrPaths = is_array($classOrPath) ? $classOrPath : [$classOrPath];
+        $classes = [];
+        $paths = [];
+
+        foreach ($classesOrPaths as $classOrPath) {
+            is_file($classOrPath) ? $paths[] = $classOrPath : $classes[] = $classOrPath;
+        }
+
+        $configuration = Container::getInstance()->get(ConfigurationRepository::class)->globalConfiguration('default');
+
+        if (count($classes) > 0) {
+            $configuration->class($classes);
+        }
+
+        if (count($paths) > 0) {
+            $configuration->path($paths);
+        }
+
+        return $configuration;
     }
 }
