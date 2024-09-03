@@ -18,7 +18,7 @@ if (! function_exists('mutate')) {
      *
      * @param array<int, string>|string $classOrPath
      */
-    function mutate(array|string $classOrPath): GlobalConfiguration
+    function mutate(array|string|null $classOrPath = null): GlobalConfiguration
     {
         try {
             if (! str_ends_with(Backtrace::testFile(), 'Pest.php')) {
@@ -30,7 +30,7 @@ if (! function_exists('mutate')) {
             // @ignoreException
         }
 
-        $classesOrPaths = is_array($classOrPath) ? $classOrPath : [$classOrPath];
+        $classesOrPaths = is_null($classOrPath) ? [] : (is_array($classOrPath) ? $classOrPath : [$classOrPath]);
         $classes = [];
         $paths = [];
 
