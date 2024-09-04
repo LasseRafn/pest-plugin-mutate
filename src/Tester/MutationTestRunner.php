@@ -89,14 +89,14 @@ class MutationTestRunner implements MutationTestRunnerContract
         return $this->codeCoverageRequested;
     }
 
-    public function run(): void
+    public function run(): int
     {
         $start = microtime(true);
 
         if (! Coverage::isAvailable() || ! file_exists($reportPath = Coverage::getPath())) {
             Container::getInstance()->get(Printer::class)->reportError('No coverage report found, aborting mutation testing.'); // @phpstan-ignore-line
 
-            exit(1);
+            return 1;
         }
 
         $this->clearCacheIfPluginVersionChanged();
@@ -192,9 +192,7 @@ class MutationTestRunner implements MutationTestRunnerContract
 
         Facade::instance()->emitter()->finishMutationSuite($mutationSuite);
 
-        $this->ensureMinScoreIsReached($mutationSuite);
-
-        exit(0); // TODO: exit with error on failure
+        return $this->isMinScoreIsReached($mutationSuite) ? 0 : 1;
     }
 
     private function getConfiguration(): Configuration
@@ -202,7 +200,7 @@ class MutationTestRunner implements MutationTestRunnerContract
         return Container::getInstance()->get(ConfigurationRepository::class)->mergedConfiguration(); // @phpstan-ignore-line
     }
 
-    private function ensureMinScoreIsReached(MutationSuite $mutationSuite): void
+    private function isMinScoreIsReached(MutationSuite $mutationSuite): bool
     {
         /** @var Configuration $configuration */
         $configuration = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
@@ -211,22 +209,22 @@ class MutationTestRunner implements MutationTestRunnerContract
         $minScore = $configuration->minScore;
 
         if ($minScore === null) {
-            return;
+            return true;
         }
 
         if ($mutationSuite->repository->count() === 0 && $configuration->ignoreMinScoreOnZeroMutations) {
-            return;
+            return true;
         }
 
         $score = $mutationSuite->score();
         if ($score >= $minScore) {
-            return;
+            return true;
         }
 
         Container::getInstance()->get(Printer::class) // @phpstan-ignore-line
             ->reportScoreNotReached($score, $minScore);
 
-        exit(1);
+        return false;
     }
 
     /**

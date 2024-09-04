@@ -10,6 +10,7 @@ test('visual snapshot of mutation tests on success', function (): void {
     $process = (new Process(
         ['php', 'vendor/bin/pest', 'tests/.tests/SuccessDescribe'],
         dirname($testsPath),
+        ['PEST_PLUGIN_INTERNAL_TEST_SUITE' => 1],
     ));
 
     $process->run();

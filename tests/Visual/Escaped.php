@@ -10,6 +10,7 @@ test('visual snapshot of mutation tests when a mutant escaped', function (): voi
     $process = (new Process(
         ['php', 'vendor/bin/pest', '--mutate', '--group=escaped'],
         dirname($testsPath),
+        ['PEST_PLUGIN_INTERNAL_TEST_SUITE' => 0],
     ));
 
     $process->run();

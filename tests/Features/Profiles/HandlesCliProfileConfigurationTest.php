@@ -116,7 +116,7 @@ it('enables covered only option if --covered-only argument is passed', function 
 it('enables parallel option if --parallel argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
     expect($this->configuration->toArray())
-        ->parallel->toBeNull();
+        ->parallel->toBeFalse();
 
     $this->configuration->fromArguments(['--parallel']);
     expect($this->configuration->toArray())

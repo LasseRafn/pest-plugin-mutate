@@ -110,7 +110,6 @@ class DefaultPrinter implements Printer
     {
         $this->output->writeln([
             '  <fg=gray>'.$mutationSuite->repository->total().' Mutations for '.$mutationSuite->repository->count().' Files created</>',
-            '',
         ]);
     }
 
