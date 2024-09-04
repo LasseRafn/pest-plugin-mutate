@@ -28,7 +28,8 @@ class RemoveNot extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var BooleanNot $node */
+        /** @var Node\Expr\BooleanNot $node */
+
         return $node->expr;
     }
 }

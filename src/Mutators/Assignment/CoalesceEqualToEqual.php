@@ -27,7 +27,8 @@ class CoalesceEqualToEqual extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Coalesce $node */
+        /** @var Node\Expr\AssignOp\Coalesce $node */
+
         return new Assign($node->var, $node->expr, $node->getAttributes());
     }
 }

@@ -27,7 +27,8 @@ class ConcatEqualToEqual extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Concat $node */
+        /** @var Node\Expr\AssignOp\Concat $node */
+
         return new Assign($node->var, $node->expr, $node->getAttributes());
     }
 }

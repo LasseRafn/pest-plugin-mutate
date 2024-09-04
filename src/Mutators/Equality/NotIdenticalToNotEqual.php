@@ -29,7 +29,7 @@ class NotIdenticalToNotEqual extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var NotIdentical $node */
+        /** @var Node\Expr\BinaryOp\NotIdentical $node */
         return new NotEqual($node->left, $node->right, $node->getAttributes());
     }
 }

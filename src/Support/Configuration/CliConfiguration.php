@@ -78,8 +78,6 @@ class CliConfiguration extends AbstractConfiguration
             }
         }
 
-        $arguments = array_values($arguments);
-
         $input = new ArgvInput($filteredArguments, new InputDefinition($inputOptions));
 
         if ($input->hasOption(CoveredOnlyOption::ARGUMENT)) {
@@ -114,7 +112,13 @@ class CliConfiguration extends AbstractConfiguration
             $this->coveredOnly($input->getOption(CoveredOnlyOption::ARGUMENT) !== 'false');
         }
 
-        $this->parallel($input->hasOption(ParallelOption::ARGUMENT));
+        if ($input->hasOption(ParallelOption::ARGUMENT)) {
+            $this->parallel();
+
+            if (($index = array_search('--parallel', $_SERVER['argv'], true)) !== false) {
+                unset($_SERVER['argv'][$index]);
+            }
+        }
 
         if ($input->hasOption(ProcessesOption::ARGUMENT)) {
             $this->processes($input->getOption(ProcessesOption::ARGUMENT) !== null ? (int) $input->getOption(ProcessesOption::ARGUMENT) : null); // @phpstan-ignore-line
@@ -163,7 +167,7 @@ class CliConfiguration extends AbstractConfiguration
         }
 
         if ($input->hasOption(NoCache::ARGUMENT)) {
-            Container::getInstance()->add(CacheInterface::class, new NullStore);
+            Container::getInstance()->add(CacheInterface::class, new NullStore());
         }
 
         if ($input->hasOption(ClearCache::ARGUMENT)) {

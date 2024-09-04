@@ -27,7 +27,8 @@ class ModulusToMultiplication extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Mod $node */
+        /** @var Node\Expr\BinaryOp\Mod $node */
+
         return new Mul($node->left, $node->right);
     }
 }

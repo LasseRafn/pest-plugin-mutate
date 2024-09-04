@@ -27,7 +27,8 @@ class ModulusEqualToMultiplyEqual extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Mod $node */
+        /** @var Node\Expr\AssignOp\Mod $node */
+
         return new Mul($node->var, $node->expr, $node->getAttributes());
     }
 }

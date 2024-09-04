@@ -26,7 +26,8 @@ class RemoveObjectCast extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Object_ $node */
+        /** @var Node\Expr\Cast\Object_ $node */
+
         return $node->expr;
     }
 }

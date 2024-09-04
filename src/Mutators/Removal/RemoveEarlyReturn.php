@@ -54,7 +54,7 @@ class RemoveEarlyReturn extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        return new Nop;
+        return new Nop();
     }
 
     private static function isEarlyReturn(ClassMethod $classMethod, Return_ $node): bool

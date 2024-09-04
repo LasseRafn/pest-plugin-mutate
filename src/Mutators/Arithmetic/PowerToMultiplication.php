@@ -27,7 +27,8 @@ class PowerToMultiplication extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Pow $node */
+        /** @var Node\Expr\BinaryOp\Pow $node */
+
         return new Mul($node->left, $node->right, $node->getAttributes());
     }
 }

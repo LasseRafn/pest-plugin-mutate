@@ -21,10 +21,10 @@ function mutateCode(string $mutator, string $code): string
     {
         public function __construct(
             private readonly string $mutator,
-            private readonly Closure $incrementMutationCount,
+            private $incrementMutationCount,
         ) {}
 
-        public function leaveNode(Node $node): mixed
+        public function leaveNode(Node $node)
         {
             if ($this->mutator::can($node)) {
                 ($this->incrementMutationCount)();
@@ -42,7 +42,7 @@ function mutateCode(string $mutator, string $code): string
         throw new Exception('No mutation performed');
     }
 
-    $prettyPrinter = new Standard;
+    $prettyPrinter = new Standard();
 
     return $prettyPrinter->prettyPrintFile($newStmts);
 }

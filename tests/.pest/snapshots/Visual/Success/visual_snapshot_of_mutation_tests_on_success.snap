@@ -1,20 +1,14 @@
 
+  Running initial test suite ...
+
   ....
 
   Tests:    4 passed (4 assertions)
   Duration: xxx
 
-  Re-running test suite for each mutation...
-  4 Mutations for 1 Files created
 
-   RUN  tests/Fixtures/Classes/AgeHelper.php
-  ✓ Line 11: GreaterOrEqualToGreater
-  ✓ Line 11: GreaterOrEqualToSmaller
-  ✓ Line 11: DecrementInteger
-  ✓ Line 11: IncrementInteger
+  Running mutation tests:
 
 
-  Mutations: 4 caught
-  Score:     100.00%
-  Duration: xxx
+  [90mMutations:[39m    [32;1m0 caught[39;22m
 

@@ -29,7 +29,7 @@ class ForeachEmptyIterable extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Foreach_ $node */
+        /** @var Node\Stmt\Foreach_ $node */
         $node->expr = new Array_(attributes: [
             'kind' => Array_::KIND_SHORT,
         ]);

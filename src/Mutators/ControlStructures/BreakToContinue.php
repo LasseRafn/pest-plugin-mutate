@@ -31,7 +31,8 @@ class BreakToContinue extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Break_ $node */
+        /** @var Node\Stmt\Break_ $node */
+
         return new Continue_($node->num, $node->getAttributes());
     }
 }

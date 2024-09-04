@@ -173,10 +173,7 @@ abstract class AbstractConfiguration implements ConfigurationContract
      */
     public function class(string|array ...$classes): self
     {
-        $this->classes = array_unique([
-            ...array_merge(...array_map(fn (string|array $class): array => is_string($class) ? [$class] : $class, $classes)),
-            ...$this->classes ?? [],
-        ]);
+        $this->classes = array_merge(...array_map(fn (string|array $class): array => is_string($class) ? [$class] : $class, $classes));
 
         return $this;
     }

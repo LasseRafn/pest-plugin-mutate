@@ -27,7 +27,8 @@ class ShiftLeftToShiftRight extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var ShiftLeft $node */
+        /** @var Node\Expr\AssignOp\ShiftLeft $node */
+
         return new ShiftRight($node->var, $node->expr, $node->getAttributes());
     }
 }

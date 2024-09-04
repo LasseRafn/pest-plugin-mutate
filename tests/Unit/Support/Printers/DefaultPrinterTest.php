@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Finder\SplFileInfo;
 
 beforeEach(function (): void {
-    $this->out = new BufferedOutput;
+    $this->out = new BufferedOutput();
     $this->printer = new DefaultPrinter($this->out);
 
     $this->createMutation = fn (): Mutation => new Mutation(
@@ -156,13 +156,14 @@ it('reports a score not reached message', function (): void {
 
 describe('mutation suite', function (): void {
     beforeEach(function (): void {
-        $this->mutationSuite = new MutationSuite;
+        $this->mutationSuite = new MutationSuite();
     });
 
     it('reports the start of mutation generation', function (): void {
         $this->printer->reportMutationGenerationStarted($this->mutationSuite);
 
         expect($this->out->fetch())
+            ->toContain('Generating mutations')
             ->toMatchSnapshot();
     });
 
@@ -182,6 +183,8 @@ describe('mutation suite', function (): void {
         $this->printer->reportMutationSuiteStarted($this->mutationSuite);
 
         expect($this->out->fetch())
+            ->toContain('Running mutation tests:')
+            ->toEndWith(PHP_EOL)
             ->toMatchSnapshot();
     });
 
@@ -191,6 +194,9 @@ describe('mutation suite', function (): void {
         $this->printer->reportMutationSuiteStarted($this->mutationSuite);
 
         expect($this->out->fetch())
+            ->toContain('Running mutation tests:')
+            ->toContain(PHP_EOL.PHP_EOL)
+            ->toEndWith('  ')
             ->toMatchSnapshot();
     });
 

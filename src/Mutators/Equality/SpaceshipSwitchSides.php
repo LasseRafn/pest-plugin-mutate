@@ -26,7 +26,7 @@ class SpaceshipSwitchSides extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Spaceship $node */
+        /** @var Node\Expr\BinaryOp\Spaceship $node */
         $tmp = $node->left;
         $node->left = $node->right;
         $node->right = $tmp;

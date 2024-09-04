@@ -27,7 +27,8 @@ class MultiplyEqualToDivideEqual extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Mul $node */
+        /** @var Node\Expr\AssignOp\Mul $node */
+
         return new Div($node->var, $node->expr, $node->getAttributes());
     }
 }

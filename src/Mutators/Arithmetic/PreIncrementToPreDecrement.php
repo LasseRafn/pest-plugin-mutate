@@ -27,7 +27,8 @@ class PreIncrementToPreDecrement extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var PreInc $node */
+        /** @var Node\Expr\PreInc $node */
+
         return new PreDec($node->var, $node->getAttributes());
     }
 }

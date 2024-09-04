@@ -8,9 +8,9 @@ use Pest\Mutate\Contracts\MutationTestRunner as MutationTestRunnerContract;
 
 class MutationTestRunnerFake implements MutationTestRunnerContract
 {
-    public function run(): int
+    public function run(): void
     {
-        return 0;
+        // TODO: Implement run() method.
     }
 
     public function enable(): void {}

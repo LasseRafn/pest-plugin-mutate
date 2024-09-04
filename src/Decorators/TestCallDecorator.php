@@ -43,7 +43,7 @@ class TestCallDecorator implements Configuration
             $this->configuration = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
                 ->testConfiguration;
         } else {
-            $this->testRunner = new MutationTestRunnerFake;
+            $this->testRunner = new MutationTestRunnerFake();
 
             $this->configuration = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
                 ->fakeTestConfiguration($profile);

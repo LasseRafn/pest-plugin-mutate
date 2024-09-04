@@ -30,7 +30,7 @@ abstract class AbstractFunctionReplaceMutator extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var FuncCall $node */
+        /** @var Node\Expr\FuncCall $node */
         $node->name = new Name(static::to());
 
         return $node;

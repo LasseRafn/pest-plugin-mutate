@@ -145,7 +145,7 @@ it('can delete multiple values', function (): void {
 });
 
 it('uses a directory in the system temp directory by default', function (): void {
-    $cache = new FileStore;
+    $cache = new FileStore();
 
     expect($cache->directory())
         ->toBe(sys_get_temp_dir().DIRECTORY_SEPARATOR.'pest-mutate-cache');

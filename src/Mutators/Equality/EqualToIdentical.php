@@ -29,7 +29,7 @@ class EqualToIdentical extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Equal $node */
+        /** @var Node\Expr\BinaryOp\Equal $node */
         return new Identical($node->left, $node->right, $node->getAttributes());
     }
 }

@@ -44,8 +44,8 @@ class ConfigurationRepository
 
     public function __construct()
     {
-        $this->cliConfiguration = new CliConfiguration;
-        $this->testConfiguration = new TestConfiguration;
+        $this->cliConfiguration = new CliConfiguration();
+        $this->testConfiguration = new TestConfiguration();
     }
 
     public function setProfile(string $profile): void
@@ -58,7 +58,7 @@ class ConfigurationRepository
         $name ??= $this->profile;
 
         if (! isset($this->globalConfigurations[$name])) {
-            $this->globalConfigurations[$name] = new GlobalConfiguration;
+            $this->globalConfigurations[$name] = new GlobalConfiguration();
         }
 
         return $this->globalConfigurations[$name];
@@ -69,7 +69,7 @@ class ConfigurationRepository
         $name ??= $this->profile;
 
         if (! isset($this->fakeTestConfigurations[$name])) {
-            $this->fakeTestConfigurations[$name] = new TestConfiguration;
+            $this->fakeTestConfigurations[$name] = new TestConfiguration();
         }
 
         return $this->fakeTestConfigurations[$name];
@@ -100,7 +100,7 @@ class ConfigurationRepository
             mutators: array_diff($config['mutators'] ?? DefaultSet::mutators(), $config['excluded_mutators'] ?? []),
             classes: $config['classes'] ?? [],
             parallel: $parallel,
-            processes: $parallel ? ($config['processes'] ?? (new CpuCoreCounter)->getCount()) : 1,
+            processes: $parallel ? ($config['processes'] ?? (new CpuCoreCounter())->getCount()) : 1,
             profile: $config['profile'] ?? false,
             minScore: $config['min_score'] ?? null,
             ignoreMinScoreOnZeroMutations: $config['ignore_min_score_on_zero_mutations'] ?? false,

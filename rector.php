@@ -27,4 +27,9 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::TYPE_DECLARATION,
     ]);
 
+    $rectorConfig->skip([
+        \Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector::class => [
+            __DIR__.'/src/Mutators',
+        ],
+    ]);
 };

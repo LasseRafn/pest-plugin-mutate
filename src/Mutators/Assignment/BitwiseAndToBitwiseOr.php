@@ -27,7 +27,8 @@ class BitwiseAndToBitwiseOr extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var BitwiseAnd $node */
+        /** @var Node\Expr\AssignOp\BitwiseAnd $node */
+
         return new BitwiseOr($node->var, $node->expr, $node->getAttributes());
     }
 }

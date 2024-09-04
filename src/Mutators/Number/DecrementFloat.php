@@ -8,7 +8,6 @@ use Pest\Mutate\Mutators\Abstract\AbstractMutator;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\Float_;
-use PhpParser\Node\Scalar\LNumber;
 
 class DecrementFloat extends AbstractMutator
 {
@@ -31,7 +30,7 @@ class DecrementFloat extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var LNumber|Float_ $node */
+        /** @var Node\Scalar\LNumber|Node\Scalar\Float_ $node */
         $node->value--;
 
         return $node;

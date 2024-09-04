@@ -8,6 +8,8 @@ use Pest\Contracts\Bootstrapper;
 use Pest\Mutate\Subscribers\DisablePhpCodeCoverageIfNotRequired;
 use Pest\Mutate\Subscribers\DisplayInitialTestRunMessage;
 use Pest\Mutate\Subscribers\EnsureInitialTestRunWasSuccessful;
+use Pest\Mutate\Subscribers\EnsurePrinterIsRegistered;
+use Pest\Mutate\Subscribers\EnsureToRunMutationTestingIfRequired;
 use Pest\Mutate\Subscribers\PrepareForInitialTestRun;
 use Pest\Subscribers;
 use Pest\Support\Container;
@@ -29,6 +31,8 @@ final class BootPhpUnitSubscribers implements Bootstrapper
         DisplayInitialTestRunMessage::class,
         PrepareForInitialTestRun::class,
         EnsureInitialTestRunWasSuccessful::class,
+        EnsureToRunMutationTestingIfRequired::class,
+        EnsurePrinterIsRegistered::class,
     ];
 
     /**

@@ -43,7 +43,7 @@ class LaravelRemoveStringableUpper extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var MethodCall $node */
+        /** @var Node\Expr\MethodCall $node */
         return $node->var;
     }
 

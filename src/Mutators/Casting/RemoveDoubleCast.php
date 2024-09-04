@@ -26,6 +26,8 @@ class RemoveDoubleCast extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        return $node->expr; // @phpstan-ignore-line
+        /** @var Node\Expr\Cast\Double $node */
+
+        return $node->expr;
     }
 }

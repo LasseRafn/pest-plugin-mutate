@@ -26,7 +26,8 @@ class RemoveBooleanCast extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Bool_ $node */
+        /** @var Node\Expr\Cast\Bool_ $node */
+
         return $node->expr;
     }
 }

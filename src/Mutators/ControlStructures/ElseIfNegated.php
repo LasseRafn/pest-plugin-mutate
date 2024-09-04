@@ -31,7 +31,7 @@ class ElseIfNegated extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var ElseIf_ $node */
+        /** @var Node\Stmt\ElseIf_ $node */
         $node->cond = new BooleanNot($node->cond);
 
         return $node;

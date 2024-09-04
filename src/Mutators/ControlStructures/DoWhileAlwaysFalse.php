@@ -30,7 +30,7 @@ class DoWhileAlwaysFalse extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Do_ $node */
+        /** @var Node\Stmt\Do_ $node */
         $node->cond = new ConstFetch(new Name('false'));
 
         return $node;

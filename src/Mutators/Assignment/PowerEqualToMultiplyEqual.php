@@ -27,7 +27,8 @@ class PowerEqualToMultiplyEqual extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Pow $node */
+        /** @var Node\Expr\AssignOp\Pow $node */
+
         return new Mul($node->var, $node->expr, $node->getAttributes());
     }
 }

@@ -22,7 +22,7 @@ class GitDiff
     public static function getInstance(): self
     {
         if (! self::$instance instanceof \Pest\Mutate\Support\GitDiff) {
-            self::$instance = new self;
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -63,7 +63,7 @@ class GitDiff
 
         $diff = $this->getDiff();
 
-        $diff = array_filter($diff, fn (Diff $diff): bool => $diff->to() === 'b/'.$file);
+        $diff = array_filter($diff, fn (Diff $diff): bool => $diff->getTo() === 'b/'.$file);
 
         if ($diff === []) {
             return [];
@@ -73,11 +73,11 @@ class GitDiff
 
         $linesNumbers = [];
 
-        foreach ($diff->chunks() as $chunk) {
-            $lineNumber = $chunk->start();
-            foreach ($chunk->lines() as $line) {
-                $lineNumber += $line->type() === 2 ? -1 : 1;
-                if ($line->type() === 1) {
+        foreach ($diff->getChunks() as $chunk) {
+            $lineNumber = $chunk->getStart();
+            foreach ($chunk->getLines() as $line) {
+                $lineNumber += $line->getType() === 2 ? -1 : 1;
+                if ($line->getType() === 1) {
                     $linesNumbers[] = $lineNumber;
                 }
             }
@@ -102,7 +102,7 @@ class GitDiff
         $output = $process->mustRun()
             ->getOutput();
 
-        $this->diff = (new Parser)
+        $this->diff = (new Parser())
             ->parse($output);
 
         return $this->diff;

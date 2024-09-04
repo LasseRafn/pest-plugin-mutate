@@ -49,7 +49,7 @@ class LaravelUnwrapStrUpper extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var StaticCall $node */
+        /** @var Node\Expr\StaticCall $node */
         return $node->args[0]->value; // @phpstan-ignore-line
     }
 }

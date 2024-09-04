@@ -43,7 +43,7 @@ class IncrementInteger extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var LNumber|Int_ $node */
+        /** @var Node\Scalar\LNumber|Node\Scalar\Int_ $node */
         $node->value += $node->getAttribute('parent') instanceof UnaryMinus ? -1 : 1;
 
         return $node;

@@ -103,18 +103,23 @@ class DefaultPrinter implements Printer
 
     public function reportMutationGenerationStarted(MutationSuite $mutationSuite): void
     {
-        $this->output->writeln('  Re-running test suite for each mutation...');
+        $this->output->writeln('  Generating mutations ...');
     }
 
     public function reportMutationGenerationFinished(MutationSuite $mutationSuite): void
     {
         $this->output->writeln([
             '  <fg=gray>'.$mutationSuite->repository->total().' Mutations for '.$mutationSuite->repository->count().' Files created</>',
+            '',
         ]);
     }
 
     public function reportMutationSuiteStarted(MutationSuite $mutationSuite): void
     {
+        $this->output->writeln([
+            '  Running mutation tests:',
+        ]);
+
         if ($this->compact) {
             $this->output->writeln('');
             $this->output->write('  ');  // ensure proper indentation before compact test output
@@ -135,7 +140,7 @@ class DefaultPrinter implements Printer
         $this->output->writeln([
             '',
             '',
-            '  <fg=gray>Mutations:</> <fg=default>'.($mutationSuite->repository->escaped() !== 0 ? '<fg=red;options=bold>'.$mutationSuite->repository->escaped().' untested</><fg=gray>,</> ' : '').($mutationSuite->repository->notCovered() !== 0 ? '<fg=yellow;options=bold>'.$mutationSuite->repository->notCovered().' not covered</><fg=gray>,</> ' : '').($mutationSuite->repository->notRun() !== 0 ? '<fg=yellow;options=bold>'.$mutationSuite->repository->notRun().' pending</><fg=gray>,</> ' : '').($mutationSuite->repository->timedOut() !== 0 ? '<fg=green;options=bold>'.$mutationSuite->repository->timedOut().' timeout</><fg=gray>,</> ' : '').'<fg=green;options=bold>'.$mutationSuite->repository->caught().' caught</>',
+            '  <fg=gray>Mutations:</> <fg=default>'.($mutationSuite->repository->escaped() !== 0 ? '<fg=red;options=bold>'.$mutationSuite->repository->escaped().' escaped</><fg=gray>,</> ' : '').($mutationSuite->repository->notCovered() !== 0 ? '<fg=yellow;options=bold>'.$mutationSuite->repository->notCovered().' not covered</><fg=gray>,</> ' : '').($mutationSuite->repository->notRun() !== 0 ? '<fg=yellow;options=bold>'.$mutationSuite->repository->notRun().' pending</><fg=gray>,</> ' : '').($mutationSuite->repository->timedOut() !== 0 ? '<fg=green;options=bold>'.$mutationSuite->repository->timedOut().' timeout</><fg=gray>,</> ' : '').'<fg=green;options=bold>'.$mutationSuite->repository->caught().' caught</>',
         ]);
 
         $score = number_format($mutationSuite->score(), 2);
@@ -197,12 +202,12 @@ class DefaultPrinter implements Printer
 
         if ($test->result() === MutationTestResult::Escaped) {
             $color = 'red';
-            $label = 'UNTESTED';
-            $error = 'Test suite passed without detecting the mutated code.';
+            $label = 'ESCAPED';
+            $error = 'Mutant has escaped.';
         } else {
             $color = 'yellow';
-            $label = 'UNTESTED';
-            $error = 'Test suite passed without detecting and executing the mutated code.';
+            $label = 'NOT COVERED';
+            $error = 'Mutation is not covered by any test.';
         }
 
         $this->output->writeln([
