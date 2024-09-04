@@ -26,8 +26,7 @@ class RemoveIntegerCast extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\Cast\Int_ $node */
-
+        /** @var Int_ $node */
         return $node->expr;
     }
 }

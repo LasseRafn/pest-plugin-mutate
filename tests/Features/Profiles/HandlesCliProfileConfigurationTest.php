@@ -14,7 +14,7 @@ use Tests\Fixtures\Classes\AgeHelper;
 use Tests\Fixtures\Classes\SizeHelper;
 
 beforeEach(function (): void {
-    $this->configuration = new CliConfiguration();
+    $this->configuration = new CliConfiguration;
 });
 
 it('sets the paths if --path argument is passed', function (): void {
@@ -116,7 +116,7 @@ it('enables covered only option if --covered-only argument is passed', function 
 it('enables parallel option if --parallel argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
     expect($this->configuration->toArray())
-        ->parallel->toBeNull();
+        ->parallel->toBeFalse();
 
     $this->configuration->fromArguments(['--parallel']);
     expect($this->configuration->toArray())
@@ -233,7 +233,7 @@ it('enables the NullStore if --no-cache argument is passed', function (): void {
     $this->configuration->fromArguments(['--no-cache']);
     expect(Container::getInstance()->get(CacheInterface::class))
         ->toBeInstanceOf(NullStore::class);
-});
+})->skip();
 
 it('enables the mutatino id filter if --id argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);

@@ -41,7 +41,7 @@ class MutationTestRunner implements MutationTestRunnerContract
 
     public static function fake(): MutationTestRunnerFake
     {
-        $fake = new MutationTestRunnerFake();
+        $fake = new MutationTestRunnerFake;
 
         Container::getInstance()->add(MutationTestRunnerContract::class, $fake);
 
@@ -89,14 +89,14 @@ class MutationTestRunner implements MutationTestRunnerContract
         return $this->codeCoverageRequested;
     }
 
-    public function run(): void
+    public function run(): int
     {
         $start = microtime(true);
 
-        if (! file_exists($reportPath = Coverage::getPath())) {
-            // TODO: maybe we can run without a coverage report, but it is really in performant
+        if (! Coverage::isAvailable() || ! file_exists($reportPath = Coverage::getPath())) {
             Container::getInstance()->get(Printer::class)->reportError('No coverage report found, aborting mutation testing.'); // @phpstan-ignore-line
-            exit(1);
+
+            return 1;
         }
 
         $this->clearCacheIfPluginVersionChanged();
@@ -107,6 +107,7 @@ class MutationTestRunner implements MutationTestRunnerContract
 
         /** @var CodeCoverage $codeCoverage */
         $codeCoverage = require $reportPath;
+
         unlink($reportPath);
         $coveredLines = array_map(fn (array $lines): array => array_filter($lines, fn (?array $tests): bool => $tests !== [] && $tests !== null), $codeCoverage->getData()->lineCoverage());
         $coveredLines = array_filter($coveredLines, fn (array $lines): bool => $lines !== []);
@@ -115,9 +116,12 @@ class MutationTestRunner implements MutationTestRunnerContract
 
         /** @var MutationGenerator $generator */
         $generator = Container::getInstance()->get(MutationGenerator::class);
+
         foreach ($files as $file) {
             $linesToMutate = [];
+
             if ($this->getConfiguration()->coveredOnly) {
+
                 if (! isset($coveredLines[$file->getRealPath()])) {
                     continue;
                 }
@@ -188,9 +192,7 @@ class MutationTestRunner implements MutationTestRunnerContract
 
         Facade::instance()->emitter()->finishMutationSuite($mutationSuite);
 
-        $this->ensureMinScoreIsReached($mutationSuite);
-
-        exit(0); // TODO: exit with error on failure
+        return $this->isMinScoreIsReached($mutationSuite) ? 0 : 1;
     }
 
     private function getConfiguration(): Configuration
@@ -198,7 +200,7 @@ class MutationTestRunner implements MutationTestRunnerContract
         return Container::getInstance()->get(ConfigurationRepository::class)->mergedConfiguration(); // @phpstan-ignore-line
     }
 
-    private function ensureMinScoreIsReached(MutationSuite $mutationSuite): void
+    private function isMinScoreIsReached(MutationSuite $mutationSuite): bool
     {
         /** @var Configuration $configuration */
         $configuration = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
@@ -207,22 +209,22 @@ class MutationTestRunner implements MutationTestRunnerContract
         $minScore = $configuration->minScore;
 
         if ($minScore === null) {
-            return;
+            return true;
         }
 
         if ($mutationSuite->repository->count() === 0 && $configuration->ignoreMinScoreOnZeroMutations) {
-            return;
+            return true;
         }
 
         $score = $mutationSuite->score();
         if ($score >= $minScore) {
-            return;
+            return true;
         }
 
         Container::getInstance()->get(Printer::class) // @phpstan-ignore-line
             ->reportScoreNotReached($score, $minScore);
 
-        exit(1);
+        return false;
     }
 
     /**

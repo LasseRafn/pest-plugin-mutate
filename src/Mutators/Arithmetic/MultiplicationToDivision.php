@@ -27,8 +27,7 @@ class MultiplicationToDivision extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\BinaryOp\Mul $node */
-
+        /** @var Mul $node */
         return new Div($node->left, $node->right);
     }
 }

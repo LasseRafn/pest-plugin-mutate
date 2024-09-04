@@ -27,8 +27,7 @@ class BitwiseXorToBitwiseAnd extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\BinaryOp\BitwiseXor $node */
-
+        /** @var BitwiseXor $node */
         return new BitwiseAnd($node->left, $node->right);
     }
 }

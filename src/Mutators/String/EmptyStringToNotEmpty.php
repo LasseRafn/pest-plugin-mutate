@@ -32,7 +32,7 @@ class EmptyStringToNotEmpty extends AbstractMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Scalar\String_ $node */
+        /** @var String_ $node */
         $node->value = 'PEST Mutator was here!';
 
         return $node;

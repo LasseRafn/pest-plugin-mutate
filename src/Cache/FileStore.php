@@ -119,7 +119,7 @@ class FileStore implements CacheInterface
     private function expiration(DateInterval|int|null $seconds): int
     {
         if ($seconds instanceof DateInterval) {
-            return (new DateTime())->add($seconds)->getTimestamp();
+            return (new DateTime)->add($seconds)->getTimestamp();
         }
 
         $seconds ??= 0;

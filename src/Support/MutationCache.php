@@ -17,7 +17,7 @@ class MutationCache
 
     public static function instance(): self
     {
-        return self::$instance ?? self::$instance = new self();
+        return self::$instance ?? self::$instance = new self;
     }
 
     public function __construct()

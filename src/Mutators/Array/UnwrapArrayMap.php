@@ -6,6 +6,7 @@ namespace Pest\Mutate\Mutators\Array;
 
 use Pest\Mutate\Mutators\Abstract\AbstractFunctionCallUnwrapMutator;
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 
 class UnwrapArrayMap extends AbstractFunctionCallUnwrapMutator
 {
@@ -25,7 +26,7 @@ class UnwrapArrayMap extends AbstractFunctionCallUnwrapMutator
 
     public static function mutate(Node $node): Node
     {
-        /** @var Node\Expr\FuncCall $node */
+        /** @var FuncCall $node */
         return $node->args[1]->value; // @phpstan-ignore-line
     }
 }
