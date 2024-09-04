@@ -10,7 +10,7 @@ test('visual snapshot of mutation tests on success', function (): void {
     $process = (new Process(
         ['php', 'vendor/bin/pest', 'tests/.tests/Success'],
         dirname($testsPath),
-        ['XDEBUG_MODE' => 'coverage'],
+        ['XDEBUG_MODE' => 'coverage', 'PEST_PLUGIN_INTERNAL_TEST_SUITE' => 1],
     ));
 
     $process->run();

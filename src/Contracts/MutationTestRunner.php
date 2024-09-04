@@ -17,5 +17,5 @@ interface MutationTestRunner
 
     public function isCodeCoverageRequested(): bool;
 
-    public function run(): void;
+    public function run(): int;
 }

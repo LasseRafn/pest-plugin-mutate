@@ -7,7 +7,6 @@
   Re-running test suite for each mutation...
   4 Mutations for 1 Files created
 
-
    RUN  tests/Fixtures/Classes/AgeHelper.php
   ✓ Line 11: GreaterOrEqualToGreater
   ✓ Line 11: GreaterOrEqualToSmaller
