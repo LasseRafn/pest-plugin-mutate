@@ -108,7 +108,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         /** @var \Pest\Mutate\Tester\MutationTestRunner $mutationTestRunner */
         $mutationTestRunner = Container::getInstance()->get(MutationTestRunner::class);
 
-        if ($this->hasArgument('mutate', $arguments)) {
+        if (! $this->hasArgument('--mutate', $arguments)) {
             return $arguments;
         }
 
@@ -127,7 +127,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
-            ->cliConfiguration->fromArguments($arguments);
+        ->cliConfiguration->fromArguments($arguments);
 
         $mutationTestRunner->setOriginalArguments($arguments);
 
@@ -143,15 +143,11 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             return $exitCode;
         }
 
-        if (! isset($_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE']) || $_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE'] === 1) {
+        if (isset($_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE']) && $_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE'] === 1) {
             return $exitCode;
         }
 
-        if (ResultReflection::numberOfTests(\PHPUnit\TestRunner\TestResult\Facade::result()) > 0) {
-            return $mutationTestRunner->run();
-        }
-
-        return $exitCode;
+        return $mutationTestRunner->run();
     }
 
     private function ensurePrinterIsRegistered(): void
