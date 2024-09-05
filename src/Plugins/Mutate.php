@@ -117,7 +117,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             $arguments = $this->popArgument('--mutate', $arguments);
         }
 
-        if (Coverage::isAvailable() && ! isset($_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE'])) {
+        if (! Coverage::isAvailable() && ! isset($_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE'])) {
             throw new InvalidOption('Mutation testing requires code coverage to be enabled. You can find more about code coverage in the Pest documentation.');
         }
 
@@ -132,7 +132,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
-            ->cliConfiguration->fromArguments($arguments);
+        ->cliConfiguration->fromArguments($arguments);
 
         $mutationTestRunner->setOriginalArguments($arguments);
 
@@ -153,7 +153,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         }
 
         /** @var ConfigurationRepository $configuration */
-        $configuration = Container::getInstance()->get(ConfigurationRepository::class);
+        $configuration = Container::getInstance()->get(ConfigurationRepository::class)->mergedConfiguration();
 
         if (! Only::isEnabled() && ! $configuration->everything) {
             throw new InvalidOption(<<<'ERROR'
