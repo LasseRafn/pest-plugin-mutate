@@ -39,7 +39,6 @@ use Pest\Mutate\Subscribers\PrinterSubscriber;
 use Pest\Mutate\Support\Printers\DefaultPrinter;
 use Pest\Mutate\Support\StreamWrapper;
 use Pest\Plugins\Concerns\HandleArguments;
-use Pest\Plugins\Only;
 use Pest\Plugins\Parallel;
 use Pest\Support\Container;
 use Pest\Support\Coverage;
@@ -157,8 +156,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         $configurationRepository = Container::getInstance()->get(ConfigurationRepository::class);
         $configuration = $configurationRepository->mergedConfiguration();
 
-        if (! Only::isEnabled() && ! $configuration->everything) {
-
+        if ($configuration->classes === [] && ! $configuration->everything) {
             $this->output->writeln(['  <bg=red> ERROR </> Mutation testing requires the usage of the `covers()` function. Here is an example:', '']);
 
             $highlighter = new Highlighter;

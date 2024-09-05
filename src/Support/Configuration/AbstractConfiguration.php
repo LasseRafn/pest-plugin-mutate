@@ -16,9 +16,6 @@ abstract class AbstractConfiguration implements ConfigurationContract
      */
     private ?array $paths = null;
 
-    /**
-     * @var bool
-     */
     private ?bool $coveredOnly = null;
 
     /**
