@@ -132,7 +132,7 @@ class MutationTestRunner implements MutationTestRunnerContract
                 file: $file,
                 mutators: $this->getConfiguration()->mutators,
                 linesToMutate: $linesToMutate,
-                classesToMutate: $this->getConfiguration()->classes,
+                classesToMutate: $this->getConfiguration()->everything ? [] : $this->getConfiguration()->classes,
             ) as $mutation) {
                 if ($this->getConfiguration()->mutationId !== null && $mutation->id !== $this->getConfiguration()->mutationId) {
                     continue;

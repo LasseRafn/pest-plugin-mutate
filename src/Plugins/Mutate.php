@@ -170,7 +170,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
 
             $this->output->writeln($content);
 
-            $this->output->writeln(['', '  <bg=cyan> INFO </> Optionally, you can use the `--everything` flag for generating mutations for "covered" classes, but this is not recommended as it will slow down the mutation testing process.', '']);
+            $this->output->writeln(['', '  <bg=cyan> INFO </> Optionally, you can use the `pest --everything --covered-only` flags for generating mutations for "covered" classes, but this is not recommended as it will slow down the mutation testing process.', '']);
 
             return 1;
         }
