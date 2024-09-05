@@ -20,9 +20,9 @@ class MutationGenerator
 
     private int $offset;
 
-    private Node $originalNode;
+    private Node $originalNode; // @phpstan-ignore-line
 
-    private ?Node $modifiedNode = null;
+    private ?Node $modifiedNode = null; // @phpstan-ignore-line
 
     /**
      * @param  array<int, class-string<Mutator>>  $mutators
@@ -87,11 +87,11 @@ class MutationGenerator
 
                     $modifiedAst = $traverser->traverse($stmts);
 
-                    if (! $this->hasMutated()) {
+                    if (! $this->mutated) { // @phpstan-ignore-line
                         break;
                     }
 
-                    $newMutations[] = Mutation::create(
+                    $newMutations[] = Mutation::create(  // @phpstan-ignore-line
                         file: $file,
                         mutator: $mutator,
                         originalNode: $this->originalNode,

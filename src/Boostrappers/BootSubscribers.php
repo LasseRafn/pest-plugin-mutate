@@ -16,7 +16,7 @@ use Pest\Support\Container;
 /**
  * @internal
  */
-final class BootSubscribers implements Bootstrapper
+final readonly class BootSubscribers implements Bootstrapper
 {
     /**
      * The list of Subscribers.
@@ -34,7 +34,7 @@ final class BootSubscribers implements Bootstrapper
      * Creates a new instance of the Boot Subscribers.
      */
     public function __construct(
-        private readonly Container $container,
+        private Container $container,
     ) {}
 
     /**

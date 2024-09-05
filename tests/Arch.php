@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 use Pest\Mutate\Contracts\Mutator;
 use Pest\Mutate\Contracts\MutatorSet;
 use Pest\Mutate\Mutators;

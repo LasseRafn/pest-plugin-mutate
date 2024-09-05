@@ -10,6 +10,6 @@ use Pest\Mutate\MutationTest;
 class Tested implements Event
 {
     public function __construct(
-        public readonly MutationTest $test,
+        public MutationTest $test,
     ) {}
 }

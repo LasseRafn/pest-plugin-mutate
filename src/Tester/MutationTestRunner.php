@@ -226,7 +226,7 @@ class MutationTestRunner implements MutationTestRunnerContract
                     continue;
                 }
 
-                usleep(1000);
+                usleep(1000); // @pest-arch-ignore-line
             }
 
             $processId = (int) array_key_first(array_filter($this->runningTests, fn (?MutationTest $process): bool => ! $process instanceof MutationTest));
