@@ -10,6 +10,7 @@ use Pest\Mutate\Support\PhpParserFactory;
 use Symfony\Component\Finder\SplFileInfo;
 use Tests\Fixtures\Classes\AgeHelper;
 use Tests\Fixtures\Classes\SizeHelper;
+use Tests\Fixtures\Traits\SizeHelperTrait;
 
 beforeEach(function (): void {
     $this->generator = new MutationGenerator;
@@ -100,6 +101,25 @@ it('generates mutations for the given file if it contains the given class', func
     [['Invalid\\Namespace\\AgeHelp'], 0],
     [['Invalid\\Namespace\\AgeHelper', AgeHelper::class], 2],
     [[SizeHelper::class, AgeHelper::class], 2],
+]);
+
+it('generates mutations for the given file if it contains the given trait', function (array $classes, int $expectedCount): void {
+    $mutations = $this->generator->generate(
+        file: new SplFileInfo(dirname(__DIR__).'/Fixtures/Traits/SizeHelperTrait.php', '', ''),
+        mutators: [SmallerToSmallerOrEqual::class],
+        classesToMutate: $classes,
+    );
+
+    expect($mutations)
+        ->toBeArray()
+        ->toHaveCount($expectedCount);
+})->with([
+    [[SizeHelperTrait::class], 1],
+    [[SizeHelper::class], 0],
+    [[SizeHelperTrait::class, SizeHelper::class], 1],
+    [['SizeHelperTrait'], 1],
+    [['Tests\\Fixtures\\Traits\\SizeHelperTrai'], 1],
+    [['Invalid\\Namespace\\SizeHelperTrait'], 0],
 ]);
 
 it('ignores lines with the ignore annotation', function (): void {
