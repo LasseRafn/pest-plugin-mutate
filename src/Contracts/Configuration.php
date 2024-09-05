@@ -30,17 +30,15 @@ interface Configuration
 
     public function ignoreMinScoreOnZeroMutations(bool $ignore = true): self;
 
-    public function coveredOnly(bool $coveredOnly = true): self;
-
     public function parallel(bool $parallel = true): self;
 
     public function processes(?int $processes = null): self;
 
     public function profile(bool $profile = true): self;
 
-    public function stopOnEscaped(bool $stopOnEscaped = true): self;
+    public function stopOnUntested(bool $stopOnUntested = true): self;
 
-    public function stopOnNotCovered(bool $stopOnNotCovered = true): self;
+    public function stopOnUncovered(bool $stopOnUncovered = true): self;
 
     public function bail(): self;
 
@@ -48,10 +46,6 @@ interface Configuration
      * @param  array<int, class-string>|class-string  ...$classes
      */
     public function class(array|string ...$classes): self;
-
-    public function uncommittedOnly(bool $uncommittedOnly = true): self;
-
-    public function changedOnly(?string $branch = 'main'): self;
 
     public function retry(bool $retry = true): self;
 }

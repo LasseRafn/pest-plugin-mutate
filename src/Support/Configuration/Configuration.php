@@ -25,10 +25,8 @@ class Configuration
         public readonly bool $profile,
         public readonly ?float $minScore,
         public readonly bool $ignoreMinScoreOnZeroMutations,
-        public readonly bool $stopOnEscaped,
-        public readonly bool $stopOnNotCovered,
-        public readonly bool $uncommittedOnly,
-        public readonly string|false $changedOnly,
+        public readonly bool $stopOnUntested,
+        public readonly bool $stopOnUncovered,
         public readonly ?string $mutationId,
         public readonly bool $retry,
     ) {}

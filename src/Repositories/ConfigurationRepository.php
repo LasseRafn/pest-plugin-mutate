@@ -94,7 +94,7 @@ class ConfigurationRepository
         }
 
         return $this->mergedConfiguration = new Configuration(
-            coveredOnly: $config['covered_only'] ?? false,
+            coveredOnly: true,
             paths: $config['paths'] ?? $this->pathsFromPhpunitConfiguration(),
             pathsToIgnore: $config['paths_to_ignore'] ?? [],
             mutators: array_diff($config['mutators'] ?? DefaultSet::mutators(), $config['excluded_mutators'] ?? []),
@@ -104,10 +104,8 @@ class ConfigurationRepository
             profile: $config['profile'] ?? false,
             minScore: $config['min_score'] ?? null,
             ignoreMinScoreOnZeroMutations: $config['ignore_min_score_on_zero_mutations'] ?? false,
-            stopOnEscaped: $config['stop_on_escaped'] ?? false,
-            stopOnNotCovered: $config['stop_on_not_covered'] ?? false,
-            uncommittedOnly: $config['uncommitted_only'] ?? false,
-            changedOnly: $config['changed_only'] ?? false,
+            stopOnUntested: $config['stop_on_untested'] ?? false,
+            stopOnUncovered: $config['stop_on_uncovered'] ?? false,
             mutationId: $config['mutation_id'] ?? null,
             retry: $config['retry'] ?? false,
         );

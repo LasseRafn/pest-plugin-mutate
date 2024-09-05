@@ -6,7 +6,7 @@ namespace Pest\Mutate\Event\Events\Test\Outcome;
 
 use Pest\Mutate\Contracts\Subscriber;
 
-interface CaughtSubscriber extends Subscriber
+interface TestedSubscriber extends Subscriber
 {
-    public function notify(Caught $event): void;
+    public function notify(Tested $event): void;
 }

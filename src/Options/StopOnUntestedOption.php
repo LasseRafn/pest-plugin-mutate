@@ -6,9 +6,9 @@ namespace Pest\Mutate\Options;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class UncommittedOnlyOption
+class StopOnUntestedOption
 {
-    final public const ARGUMENT = 'uncommitted-only';
+    final public const ARGUMENT = 'stop-on-untested';
 
     public static function remove(): bool
     {

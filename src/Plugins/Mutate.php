@@ -4,26 +4,25 @@ declare(strict_types=1);
 
 namespace Pest\Mutate\Plugins;
 
-use NunoMaduro\Collision\Adapters\Phpunit\Support\ResultReflection;
 use Pest\Contracts\Bootstrapper;
 use Pest\Contracts\Plugins\AddsOutput;
 use Pest\Contracts\Plugins\Bootable;
 use Pest\Contracts\Plugins\HandlesArguments;
 use Pest\Mutate\Boostrappers\BootPhpUnitSubscribers;
 use Pest\Mutate\Boostrappers\BootSubscribers;
-use Pest\Mutate\Cache\NullStore;
+use Pest\Mutate\Cache\FileStore;
 use Pest\Mutate\Contracts\MutationTestRunner;
 use Pest\Mutate\Contracts\Printer;
 use Pest\Mutate\Event\Events\Test\HookMethod\BeforeFirstTestExecuted;
 use Pest\Mutate\Event\Events\Test\HookMethod\BeforeFirstTestExecutedSubscriber;
-use Pest\Mutate\Event\Events\Test\Outcome\Caught;
-use Pest\Mutate\Event\Events\Test\Outcome\CaughtSubscriber;
-use Pest\Mutate\Event\Events\Test\Outcome\Escaped;
-use Pest\Mutate\Event\Events\Test\Outcome\EscapedSubscriber;
-use Pest\Mutate\Event\Events\Test\Outcome\NotCovered;
-use Pest\Mutate\Event\Events\Test\Outcome\NotCoveredSubscriber;
+use Pest\Mutate\Event\Events\Test\Outcome\Tested;
+use Pest\Mutate\Event\Events\Test\Outcome\TestedSubscriber;
 use Pest\Mutate\Event\Events\Test\Outcome\Timeout;
 use Pest\Mutate\Event\Events\Test\Outcome\TimeoutSubscriber;
+use Pest\Mutate\Event\Events\Test\Outcome\Uncovered;
+use Pest\Mutate\Event\Events\Test\Outcome\UncoveredSubscriber;
+use Pest\Mutate\Event\Events\Test\Outcome\Untested;
+use Pest\Mutate\Event\Events\Test\Outcome\UntestedSubscriber;
 use Pest\Mutate\Event\Events\TestSuite\FinishMutationGeneration;
 use Pest\Mutate\Event\Events\TestSuite\FinishMutationGenerationSubscriber;
 use Pest\Mutate\Event\Events\TestSuite\FinishMutationSuite;
@@ -97,7 +96,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             $bootstrapper->boot();
         }
 
-        $this->container->add(CacheInterface::class, new NullStore);
+        $this->container->add(CacheInterface::class, new FileStore);
     }
 
     /**
@@ -109,10 +108,12 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         $mutationTestRunner = Container::getInstance()->get(MutationTestRunner::class);
 
         if (! $this->hasArgument('--mutate', $arguments)) {
-            return $arguments;
+            if (! $mutationTestRunner->isEnabled()) {
+                return $arguments;
+            }
+        } else {
+            $arguments = $this->popArgument('--mutate', $arguments);
         }
-
-        $arguments = $this->popArgument('--mutate', $arguments);
 
         $mutationTestRunner->enable();
         $this->ensurePrinterIsRegistered();
@@ -127,7 +128,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
-        ->cliConfiguration->fromArguments($arguments);
+            ->cliConfiguration->fromArguments($arguments);
 
         $mutationTestRunner->setOriginalArguments($arguments);
 
@@ -166,19 +167,19 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             },
 
             // Test > Outcome
-            new class($printer) extends PrinterSubscriber implements CaughtSubscriber
+            new class($printer) extends PrinterSubscriber implements TestedSubscriber
             {
-                public function notify(Caught $event): void
+                public function notify(Tested $event): void
                 {
-                    $this->printer()->reportCaughtMutation($event->test);
+                    $this->printer()->reportTestedMutation($event->test);
                 }
             },
 
-            new class($printer) extends PrinterSubscriber implements EscapedSubscriber
+            new class($printer) extends PrinterSubscriber implements UntestedSubscriber
             {
-                public function notify(Escaped $event): void
+                public function notify(Untested $event): void
                 {
-                    $this->printer()->reportEscapedMutation($event->test);
+                    $this->printer()->reportUntestedMutation($event->test);
                 }
             },
 
@@ -190,11 +191,11 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
                 }
             },
 
-            new class($printer) extends PrinterSubscriber implements NotCoveredSubscriber
+            new class($printer) extends PrinterSubscriber implements UncoveredSubscriber
             {
-                public function notify(NotCovered $event): void
+                public function notify(Uncovered $event): void
                 {
-                    $this->printer()->reportNotCoveredMutation($event->test);
+                    $this->printer()->reportUncoveredMutation($event->test);
                 }
             },
 

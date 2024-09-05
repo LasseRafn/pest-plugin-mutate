@@ -95,24 +95,6 @@ it('enables ignore min score on zero mutations option if --ignore-min-score-on-z
         ->ignore_min_score_on_zero_mutations->toBeFalse();
 });
 
-it('enables covered only option if --covered-only argument is passed', function (): void {
-    $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
-    expect($this->configuration->toArray())
-        ->covered_only->toBeNull();
-
-    $this->configuration->fromArguments(['--covered-only']);
-    expect($this->configuration->toArray())
-        ->covered_only->toBeTrue();
-
-    $this->configuration->fromArguments(['--covered-only=true']);
-    expect($this->configuration->toArray())
-        ->covered_only->toBeTrue();
-
-    $this->configuration->fromArguments(['--covered-only=false']);
-    expect($this->configuration->toArray())
-        ->covered_only->toBeFalse();
-});
-
 it('enables parallel option if --parallel argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
     expect($this->configuration->toArray())
@@ -147,60 +129,36 @@ it('sets the class if --class argument is passed', function (): void {
         ->toEqual([AgeHelper::class, SizeHelper::class]);
 });
 
-it('enables stop on escaped option if --stop-on-escaped argument is passed', function (): void {
+it('enables stop on untested option if --stop-on-untested argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
     expect($this->configuration->toArray())
-        ->stop_on_escaped->toBeNull();
+        ->stop_on_untested->toBeNull();
 
-    $this->configuration->fromArguments(['--stop-on-escaped']);
+    $this->configuration->fromArguments(['--stop-on-untested']);
     expect($this->configuration->toArray())
-        ->stop_on_escaped->toBeTrue();
+        ->stop_on_untested->toBeTrue();
 });
 
 it('enables stop on not covered option if --stop-on-uncovered argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
     expect($this->configuration->toArray())
-        ->stop_on_not_covered->toBeNull();
+        ->stop_on_uncovered->toBeNull();
 
-    $this->configuration->fromArguments(['--stop-on-not-covered']);
+    $this->configuration->fromArguments(['--stop-on-uncovered']);
     expect($this->configuration->toArray())
-        ->stop_on_not_covered->toBeTrue();
+        ->stop_on_uncovered->toBeTrue();
 });
 
-it('enables stop on escaped and stop on not covered option if --bail argument is passed', function (): void {
+it('enables stop on untested and stop on not covered option if --bail argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
     expect($this->configuration->toArray())
-        ->stop_on_escaped->toBeNull()
-        ->stop_on_not_covered->toBeNull();
+        ->stop_on_untested->toBeNull()
+        ->stop_on_uncovered->toBeNull();
 
     $this->configuration->fromArguments(['--bail']);
     expect($this->configuration->toArray())
-        ->stop_on_escaped->toBeTrue()
-        ->stop_on_not_covered->toBeTrue();
-});
-
-it('enables uncommitted only option if --uncommitted-only argument is passed', function (): void {
-    $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
-    expect($this->configuration->toArray())
-        ->uncommitted_only->toBeNull();
-
-    $this->configuration->fromArguments(['--uncommitted-only']);
-    expect($this->configuration->toArray())
-        ->uncommitted_only->toBeTrue();
-});
-
-it('enables changed only option if --changed-only argument is passed', function (): void {
-    $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
-    expect($this->configuration->toArray())
-        ->changed_only->toBeNull();
-
-    $this->configuration->fromArguments(['--changed-only']);
-    expect($this->configuration->toArray())
-        ->changed_only->toBe('main');
-
-    $this->configuration->fromArguments(['--changed-only=other-branch']);
-    expect($this->configuration->toArray())
-        ->changed_only->toBe('other-branch');
+        ->stop_on_untested->toBeTrue()
+        ->stop_on_uncovered->toBeTrue();
 });
 
 it('enables profile option if --profile argument is passed', function (): void {
@@ -217,12 +175,12 @@ it('enables profile option if --retry argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
     expect($this->configuration->toArray())
         ->retry->toBeNull()
-        ->stop_on_escaped->toBeNull();
+        ->stop_on_untested->toBeNull();
 
     $this->configuration->fromArguments(['--retry']);
     expect($this->configuration->toArray())
         ->retry->toBeTrue()
-        ->stop_on_escaped->toBeTrue();
+        ->stop_on_untested->toBeTrue();
 });
 
 it('enables the NullStore if --no-cache argument is passed', function (): void {
@@ -233,7 +191,7 @@ it('enables the NullStore if --no-cache argument is passed', function (): void {
     $this->configuration->fromArguments(['--no-cache']);
     expect(Container::getInstance()->get(CacheInterface::class))
         ->toBeInstanceOf(NullStore::class);
-})->skip();
+});
 
 it('enables the mutatino id filter if --id argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);

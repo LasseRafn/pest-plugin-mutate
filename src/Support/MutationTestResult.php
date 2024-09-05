@@ -7,8 +7,8 @@ namespace Pest\Mutate\Support;
 enum MutationTestResult: string
 {
     case None = 'none';
-    case NotCovered = 'not-covered';
-    case Caught = 'caught';
-    case Escaped = 'escaped';
+    case Tested = 'tested';
+    case Uncovered = 'uncovered';
+    case Untested = 'untested';
     case Timeout = 'timeout';
 }

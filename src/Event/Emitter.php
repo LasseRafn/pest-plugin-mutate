@@ -6,14 +6,14 @@ namespace Pest\Mutate\Event;
 
 use Pest\Mutate\Event\Events\Test\HookMethod\BeforeFirstTestExecuted;
 use Pest\Mutate\Event\Events\Test\HookMethod\BeforeFirstTestExecutedSubscriber;
-use Pest\Mutate\Event\Events\Test\Outcome\Caught;
-use Pest\Mutate\Event\Events\Test\Outcome\CaughtSubscriber;
-use Pest\Mutate\Event\Events\Test\Outcome\Escaped;
-use Pest\Mutate\Event\Events\Test\Outcome\EscapedSubscriber;
-use Pest\Mutate\Event\Events\Test\Outcome\NotCovered;
-use Pest\Mutate\Event\Events\Test\Outcome\NotCoveredSubscriber;
+use Pest\Mutate\Event\Events\Test\Outcome\Tested;
+use Pest\Mutate\Event\Events\Test\Outcome\TestedSubscriber;
 use Pest\Mutate\Event\Events\Test\Outcome\Timeout;
 use Pest\Mutate\Event\Events\Test\Outcome\TimeoutSubscriber;
+use Pest\Mutate\Event\Events\Test\Outcome\Uncovered;
+use Pest\Mutate\Event\Events\Test\Outcome\UncoveredSubscriber;
+use Pest\Mutate\Event\Events\Test\Outcome\Untested;
+use Pest\Mutate\Event\Events\Test\Outcome\UntestedSubscriber;
 use Pest\Mutate\Event\Events\TestSuite\FinishMutationGeneration;
 use Pest\Mutate\Event\Events\TestSuite\FinishMutationGenerationSubscriber;
 use Pest\Mutate\Event\Events\TestSuite\FinishMutationSuite;
@@ -39,22 +39,22 @@ class Emitter
         return self::$instance;
     }
 
-    public function mutationCaught(MutationTest $test): void
+    public function mutationTested(MutationTest $test): void
     {
-        $event = new Caught($test);
+        $event = new Tested($test);
 
-        foreach (Facade::instance()->subscribers()[CaughtSubscriber::class] ?? [] as $subscriber) {
-            /** @var CaughtSubscriber $subscriber */
+        foreach (Facade::instance()->subscribers()[TestedSubscriber::class] ?? [] as $subscriber) {
+            /** @var TestedSubscriber $subscriber */
             $subscriber->notify($event);
         }
     }
 
     public function mutationEscaped(MutationTest $test): void
     {
-        $event = new Escaped($test);
+        $event = new Untested($test);
 
-        foreach (Facade::instance()->subscribers()[EscapedSubscriber::class] ?? [] as $subscriber) {
-            /** @var EscapedSubscriber $subscriber */
+        foreach (Facade::instance()->subscribers()[UntestedSubscriber::class] ?? [] as $subscriber) {
+            /** @var UntestedSubscriber $subscriber */
             $subscriber->notify($event);
         }
     }
@@ -69,12 +69,12 @@ class Emitter
         }
     }
 
-    public function mutationNotCovered(MutationTest $test): void
+    public function mutationUncovered(MutationTest $test): void
     {
-        $event = new NotCovered($test);
+        $event = new Uncovered($test);
 
-        foreach (Facade::instance()->subscribers()[NotCoveredSubscriber::class] ?? [] as $subscriber) {
-            /** @var NotCoveredSubscriber $subscriber */
+        foreach (Facade::instance()->subscribers()[UncoveredSubscriber::class] ?? [] as $subscriber) {
+            /** @var UncoveredSubscriber $subscriber */
             $subscriber->notify($event);
         }
     }

@@ -36,14 +36,14 @@ class MutationTestCollection
         return count($this->tests);
     }
 
-    public function escaped(): int
+    public function untested(): int
     {
-        return count(array_filter($this->tests, fn (MutationTest $test): bool => $test->result() === MutationTestResult::Escaped));
+        return count(array_filter($this->tests, fn (MutationTest $test): bool => $test->result() === MutationTestResult::Untested));
     }
 
-    public function caught(): int
+    public function tested(): int
     {
-        return count(array_filter($this->tests, fn (MutationTest $test): bool => $test->result() === MutationTestResult::Caught));
+        return count(array_filter($this->tests, fn (MutationTest $test): bool => $test->result() === MutationTestResult::Tested));
     }
 
     public function timedOut(): int
@@ -51,9 +51,9 @@ class MutationTestCollection
         return count(array_filter($this->tests, fn (MutationTest $test): bool => $test->result() === MutationTestResult::Timeout));
     }
 
-    public function notCovered(): int
+    public function uncovered(): int
     {
-        return count(array_filter($this->tests, fn (MutationTest $test): bool => $test->result() === MutationTestResult::NotCovered));
+        return count(array_filter($this->tests, fn (MutationTest $test): bool => $test->result() === MutationTestResult::Uncovered));
     }
 
     public function notRun(): int
@@ -63,7 +63,7 @@ class MutationTestCollection
 
     public function hasLastRunEscapedMutation(): bool
     {
-        return array_filter(ResultCache::instance()->get($this), fn (string $result): bool => $result === MutationTestResult::Escaped->value) !== [];
+        return array_filter(ResultCache::instance()->get($this), fn (string $result): bool => $result === MutationTestResult::Untested->value) !== [];
     }
 
     /**
@@ -86,7 +86,7 @@ class MutationTestCollection
     {
         $lastRunResults = ResultCache::instance()->get($this);
 
-        usort($this->tests, fn (MutationTest $a, MutationTest $b): int => ($b->lastRunResult($lastRunResults) === MutationTestResult::Escaped) <=> ($a->lastRunResult($lastRunResults) === MutationTestResult::Escaped));
+        usort($this->tests, fn (MutationTest $a, MutationTest $b): int => ($b->lastRunResult($lastRunResults) === MutationTestResult::Untested) <=> ($a->lastRunResult($lastRunResults) === MutationTestResult::Untested));
     }
 
     public function isComplete(): bool

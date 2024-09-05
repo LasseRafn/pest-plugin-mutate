@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use Tests\Fixtures\Classes\AgeHelper;
+
 describe('catches all', function(){
     it('catches all the mutants', function (int $age, bool $isAdult) {
-        expect(\Tests\Fixtures\Classes\AgeHelper::isAdult($age))
+        expect(AgeHelper::isAdult($age))
             ->toBe($isAdult);
     })->with([
         [10, false],
@@ -12,4 +14,4 @@ describe('catches all', function(){
         [18, true],
         [25, true],
     ]);
-})->mutate();
+});

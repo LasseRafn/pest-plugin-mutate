@@ -62,9 +62,9 @@ class MutationTest
         $filters = array_unique($filters);
 
         if ($filters === []) {
-            $this->updateResult(MutationTestResult::NotCovered);
+            $this->updateResult(MutationTestResult::Uncovered);
 
-            Facade::instance()->emitter()->mutationNotCovered($this);
+            Facade::instance()->emitter()->mutationUncovered($this);
 
             return false;
         }
@@ -128,7 +128,7 @@ class MutationTest
         }
 
         if ($this->process->isSuccessful()) {
-            $this->updateResult(MutationTestResult::Escaped);
+            $this->updateResult(MutationTestResult::Untested);
 
             Facade::instance()->emitter()->mutationEscaped($this);
 
@@ -137,9 +137,9 @@ class MutationTest
             return true;
         }
 
-        $this->updateResult(MutationTestResult::Caught);
+        $this->updateResult(MutationTestResult::Tested);
 
-        Facade::instance()->emitter()->mutationCaught($this);
+        Facade::instance()->emitter()->mutationTested($this);
 
         $this->finish = microtime(true);
 

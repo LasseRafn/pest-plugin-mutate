@@ -8,9 +8,9 @@ test('visual snapshot of mutation tests on success', function (): void {
     $testsPath = dirname(__DIR__);
 
     $process = (new Process(
-        ['php', 'vendor/bin/pest', 'tests/.tests/Success'],
+        ['php', 'vendor/bin/pest', 'tests/.tests/SuccessDescribe', '--mutate'],
         dirname($testsPath),
-        ['XDEBUG_MODE' => 'coverage', 'PEST_PLUGIN_INTERNAL_TEST_SUITE' => 1],
+        ['PEST_PLUGIN_INTERNAL_TEST_SUITE' => 1],
     ));
 
     $process->run();
@@ -23,7 +23,6 @@ test('visual snapshot of mutation tests on success', function (): void {
         '$1',
     ], $process->getOutput());
 
-    $output = preg_replace('/Duration:  .*/', 'Duration:  xxx', $output);
     $output = preg_replace('/Duration: .*/', 'Duration: xxx', $output);
 
     expect($output)

@@ -6,10 +6,8 @@ namespace Pest\Mutate\Support\Configuration;
 
 use Pest\Mutate\Cache\NullStore;
 use Pest\Mutate\Options\BailOption;
-use Pest\Mutate\Options\ChangedOnlyOption;
 use Pest\Mutate\Options\ClassOption;
 use Pest\Mutate\Options\ClearCache;
-use Pest\Mutate\Options\CoveredOnlyOption;
 use Pest\Mutate\Options\ExceptOption;
 use Pest\Mutate\Options\IgnoreMinScoreOnZeroMutationsOption;
 use Pest\Mutate\Options\IgnoreOption;
@@ -23,9 +21,8 @@ use Pest\Mutate\Options\PathOption;
 use Pest\Mutate\Options\ProcessesOption;
 use Pest\Mutate\Options\ProfileOption;
 use Pest\Mutate\Options\RetryOption;
-use Pest\Mutate\Options\StopOnEscapedOption;
-use Pest\Mutate\Options\StopOnNotCoveredOption;
-use Pest\Mutate\Options\UncommittedOnlyOption;
+use Pest\Mutate\Options\StopOnUncoveredOption;
+use Pest\Mutate\Options\StopOnUntestedOption;
 use Pest\Support\Container;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -36,7 +33,6 @@ class CliConfiguration extends AbstractConfiguration
     private const OPTIONS = [
         MutateOption::class,
         ClassOption::class,
-        CoveredOnlyOption::class,
         MinScoreOption::class,
         IgnoreMinScoreOnZeroMutationsOption::class,
         MutatorsOption::class,
@@ -46,11 +42,9 @@ class CliConfiguration extends AbstractConfiguration
         ParallelOption::class,
         ProcessesOption::class,
         ProfileOption::class,
-        StopOnEscapedOption::class,
-        StopOnNotCoveredOption::class,
+        StopOnUntestedOption::class,
+        StopOnUncoveredOption::class,
         BailOption::class,
-        UncommittedOnlyOption::class,
-        ChangedOnlyOption::class,
         RetryOption::class,
         MutationIdOption::class,
         NoCache::class,
@@ -82,10 +76,6 @@ class CliConfiguration extends AbstractConfiguration
 
         $input = new ArgvInput($filteredArguments, new InputDefinition($inputOptions));
 
-        if ($input->hasOption(CoveredOnlyOption::ARGUMENT)) {
-            $this->coveredOnly($input->getOption(CoveredOnlyOption::ARGUMENT) !== 'false');
-        }
-
         if ($input->hasOption(PathOption::ARGUMENT)) {
             $this->path(explode(',', (string) $input->getOption(PathOption::ARGUMENT))); // @phpstan-ignore-line
         }
@@ -110,10 +100,6 @@ class CliConfiguration extends AbstractConfiguration
             $this->ignoreMinScoreOnZeroMutations($input->getOption(IgnoreMinScoreOnZeroMutationsOption::ARGUMENT) !== 'false');
         }
 
-        if ($input->hasOption(CoveredOnlyOption::ARGUMENT)) {
-            $this->coveredOnly($input->getOption(CoveredOnlyOption::ARGUMENT) !== 'false');
-        }
-
         $this->parallel($input->hasOption(ParallelOption::ARGUMENT));
 
         if ($input->hasOption(ProcessesOption::ARGUMENT)) {
@@ -133,25 +119,17 @@ class CliConfiguration extends AbstractConfiguration
             $this->class(explode(',', (string) $input->getOption(ClassOption::ARGUMENT))); // @phpstan-ignore-line
         }
 
-        if ($input->hasOption(StopOnEscapedOption::ARGUMENT)) {
-            $this->stopOnEscaped($input->getOption(StopOnEscapedOption::ARGUMENT) !== 'false');
+        if ($input->hasOption(StopOnUntestedOption::ARGUMENT)) {
+            $this->stopOnUntested($input->getOption(StopOnUntestedOption::ARGUMENT) !== 'false');
         }
 
-        if ($input->hasOption(StopOnNotCoveredOption::ARGUMENT)) {
-            $this->stopOnNotCovered($input->getOption(StopOnNotCoveredOption::ARGUMENT) !== 'false');
+        if ($input->hasOption(StopOnUncoveredOption::ARGUMENT)) {
+            $this->stopOnUncovered($input->getOption(StopOnUncoveredOption::ARGUMENT) !== 'false');
         }
 
         if ($input->hasOption(BailOption::ARGUMENT)) {
-            $this->stopOnEscaped();
-            $this->stopOnNotCovered();
-        }
-
-        if ($input->hasOption(UncommittedOnlyOption::ARGUMENT)) {
-            $this->uncommittedOnly($input->getOption(UncommittedOnlyOption::ARGUMENT) !== 'false');
-        }
-
-        if ($input->hasOption(ChangedOnlyOption::ARGUMENT)) {
-            $this->changedOnly($input->getOption(ChangedOnlyOption::ARGUMENT) !== null ? (string) $input->getOption(ChangedOnlyOption::ARGUMENT) : 'main'); // @phpstan-ignore-line
+            $this->stopOnUntested();
+            $this->stopOnUncovered();
         }
 
         if ($input->hasOption(RetryOption::ARGUMENT)) {

@@ -14,7 +14,6 @@ use Pest\Mutate\Plugins\Mutate;
 use Pest\Mutate\Repositories\ConfigurationRepository;
 use Pest\Mutate\Support\Configuration\Configuration;
 use Pest\Mutate\Support\FileFinder;
-use Pest\Mutate\Support\GitDiff;
 use Pest\Mutate\Support\MutationGenerator;
 use Pest\Support\Container;
 use Pest\Support\Coverage;
@@ -127,30 +126,6 @@ class MutationTestRunner implements MutationTestRunnerContract
                 }
 
                 $linesToMutate = array_keys($coveredLines[$file->getRealPath()]);
-            }
-
-            if ($this->getConfiguration()->uncommittedOnly) {
-                $lines = GitDiff::getInstance()
-                    ->uncommitted()
-                    ->modifiedLinesPerFile(substr($file->getRealPath(), strlen((string) getcwd())));
-
-                if ($lines === []) {
-                    continue;
-                }
-
-                $linesToMutate = $linesToMutate === [] ? $lines : array_intersect($linesToMutate, $lines);
-            }
-
-            if ($this->getConfiguration()->changedOnly !== false) {
-                $lines = GitDiff::getInstance()
-                    ->branch($this->getConfiguration()->changedOnly)
-                    ->modifiedLinesPerFile(substr($file->getRealPath(), strlen((string) getcwd())));
-
-                if ($lines === []) {
-                    continue;
-                }
-
-                $linesToMutate = $linesToMutate === [] ? $lines : array_intersect($linesToMutate, $lines);
             }
 
             foreach ($generator->generate(

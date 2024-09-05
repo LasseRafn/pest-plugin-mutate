@@ -46,14 +46,14 @@ class MutationRepository
         return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->count(), $this->tests));
     }
 
-    public function escaped(): int
+    public function untested(): int
     {
-        return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->escaped(), $this->tests));
+        return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->untested(), $this->tests));
     }
 
-    public function caught(): int
+    public function tested(): int
     {
-        return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->caught(), $this->tests));
+        return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->tested(), $this->tests));
     }
 
     public function timedOut(): int
@@ -61,9 +61,9 @@ class MutationRepository
         return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->timedOut(), $this->tests));
     }
 
-    public function notCovered(): int
+    public function uncovered(): int
     {
-        return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->notCovered(), $this->tests));
+        return array_sum(array_map(fn (MutationTestCollection $testCollection): int => $testCollection->uncovered(), $this->tests));
     }
 
     public function notRun(): int
@@ -77,7 +77,7 @@ class MutationRepository
             return 0;
         }
 
-        return ($this->caught() + $this->timedOut()) / $this->total() * 100;
+        return ($this->tested() + $this->timedOut()) / $this->total() * 100;
     }
 
     /**

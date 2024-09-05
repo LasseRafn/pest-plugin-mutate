@@ -10,4 +10,4 @@ it('catches all the mutants', function (int $age, bool $isAdult) {
     [17, false],
     [18, true],
     [25, true],
-])->mutate();
+]);

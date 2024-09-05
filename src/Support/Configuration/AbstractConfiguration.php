@@ -40,21 +40,15 @@ abstract class AbstractConfiguration implements ConfigurationContract
 
     private ?bool $ignoreMinScoreOnZeroMutations = null;
 
-    private ?bool $coveredOnly = null;
-
     private ?bool $parallel = null;
 
     private ?int $processes = null;
 
     private ?bool $profile = null;
 
-    private ?bool $stopOnEscaped = null;
+    private ?bool $stopOnUntested = null;
 
-    private ?bool $stopOnNotCovered = null;
-
-    private ?bool $uncommittedOnly = null;
-
-    private ?string $changedOnly = null;
+    private ?bool $stopOnUncovered = null;
 
     private ?bool $retry = null;
 
@@ -118,13 +112,6 @@ abstract class AbstractConfiguration implements ConfigurationContract
         return $this;
     }
 
-    public function coveredOnly(bool $coveredOnly = true): self
-    {
-        $this->coveredOnly = $coveredOnly;
-
-        return $this;
-    }
-
     public function parallel(bool $parallel = true): self
     {
         $this->parallel = $parallel;
@@ -146,24 +133,24 @@ abstract class AbstractConfiguration implements ConfigurationContract
         return $this;
     }
 
-    public function stopOnEscaped(bool $stopOnEscaped = true): self
+    public function stopOnUntested(bool $stopOnUntested = true): self
     {
-        $this->stopOnEscaped = $stopOnEscaped;
+        $this->stopOnUntested = $stopOnUntested;
 
         return $this;
     }
 
-    public function stopOnNotCovered(bool $stopOnNotCovered = true): self
+    public function stopOnUncovered(bool $stopOnUncovered = true): self
     {
-        $this->stopOnNotCovered = $stopOnNotCovered;
+        $this->stopOnUncovered = $stopOnUncovered;
 
         return $this;
     }
 
     public function bail(): self
     {
-        $this->stopOnEscaped = true;
-        $this->stopOnNotCovered = true;
+        $this->stopOnUntested = true;
+        $this->stopOnUncovered = true;
 
         return $this;
     }
@@ -181,20 +168,6 @@ abstract class AbstractConfiguration implements ConfigurationContract
         return $this;
     }
 
-    public function uncommittedOnly(bool $uncommittedOnly = true): self
-    {
-        $this->uncommittedOnly = $uncommittedOnly;
-
-        return $this;
-    }
-
-    public function changedOnly(?string $branch = 'main'): self
-    {
-        $this->changedOnly = $branch;
-
-        return $this;
-    }
-
     public function mutationId(string $id): self
     {
         $this->mutationId = $id;
@@ -203,7 +176,7 @@ abstract class AbstractConfiguration implements ConfigurationContract
     }
 
     /**
-     * @return array{paths?: string[], paths_to_ignore?: string[], mutators?: class-string<Mutator>[], excluded_mutators?: class-string<Mutator>[], classes?: string[], parallel?: bool, processes?: int, profile?: bool, min_score?: float, ignore_min_score_on_zero_mutations?: bool, covered_only?: bool, stop_on_escaped?: bool, stop_on_not_covered?: bool, uncommitted_only?: bool, changed_only?: string, mutation_id?: string, retry?: bool}
+     * @return array{paths?: string[], paths_to_ignore?: string[], mutators?: class-string<Mutator>[], excluded_mutators?: class-string<Mutator>[], classes?: string[], parallel?: bool, processes?: int, profile?: bool, min_score?: float, ignore_min_score_on_zero_mutations?: bool, covered_only?: bool, stop_on_untested?: bool, stop_on_uncovered?: bool, mutation_id?: string, retry?: bool}
      */
     public function toArray(): array
     {
@@ -218,11 +191,8 @@ abstract class AbstractConfiguration implements ConfigurationContract
             'profile' => $this->profile,
             'min_score' => $this->minScore,
             'ignore_min_score_on_zero_mutations' => $this->ignoreMinScoreOnZeroMutations,
-            'covered_only' => $this->coveredOnly,
-            'stop_on_escaped' => $this->stopOnEscaped,
-            'stop_on_not_covered' => $this->stopOnNotCovered,
-            'uncommitted_only' => $this->uncommittedOnly,
-            'changed_only' => $this->changedOnly,
+            'stop_on_untested' => $this->stopOnUntested,
+            'stop_on_uncovered' => $this->stopOnUncovered,
             'mutation_id' => $this->mutationId,
             'retry' => $this->retry,
         ], fn (mixed $value): bool => ! is_null($value));
@@ -266,7 +236,7 @@ abstract class AbstractConfiguration implements ConfigurationContract
         $this->retry = $retry;
 
         if ($retry) {
-            $this->stopOnEscaped = true;
+            $this->stopOnUntested = true;
         }
 
         return $this;
