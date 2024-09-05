@@ -288,7 +288,7 @@ class MutationTestRunner implements MutationTestRunnerContract
         /** @var ?string $previousVersion */
         $previousVersion = $cache->get('mutation-plugin-version'); // @phpstan-ignore-line
 
-        if ($previousVersion !== null && $previousVersion !== $pluginVersion) {
+        if ($previousVersion === null || $previousVersion !== $pluginVersion) {
             $cache->clear(); // @phpstan-ignore-line
         }
 

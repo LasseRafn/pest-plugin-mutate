@@ -24,7 +24,7 @@ class VisibilitySet implements MutatorSet
     public static function defaultMutators(): array
     {
         return [
-            FunctionPublicToProtected::class,
+            // ...
         ];
     }
 
