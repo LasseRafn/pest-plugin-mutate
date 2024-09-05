@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Mutate\Plugins;
 
+use NunoMaduro\Collision\Highlighter;
 use Pest\Contracts\Bootstrapper;
 use Pest\Contracts\Plugins\AddsOutput;
 use Pest\Contracts\Plugins\Bootable;
@@ -132,7 +133,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
-        ->cliConfiguration->fromArguments($arguments);
+            ->cliConfiguration->fromArguments($arguments);
 
         $mutationTestRunner->setOriginalArguments($arguments);
 
@@ -152,25 +153,28 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             return $exitCode;
         }
 
-        /** @var ConfigurationRepository $configuration */
-        $configuration = Container::getInstance()->get(ConfigurationRepository::class)->mergedConfiguration();
+        /** @var ConfigurationRepository $configurationRepository */
+        $configurationRepository = Container::getInstance()->get(ConfigurationRepository::class);
+        $configuration = $configurationRepository->mergedConfiguration();
 
         if (! Only::isEnabled() && ! $configuration->everything) {
-            throw new InvalidOption(<<<'ERROR'
-                Mutation testing requires the usage of the `covers()` function. Here is an example:
 
-                ```
-                <?php
+            $this->output->writeln(['  <bg=red> ERROR </> Mutation testing requires the usage of the `covers()` function. Here is an example:', '']);
 
+            $highlighter = new Highlighter;
+            $content = $highlighter->highlight(<<<'PHP'
                 covers(TodoController::class); // mutations will be generated only for this class
 
                 it('list todos', function () {
                     // your test here...
                 });
-                ```
+            PHP, 1);
 
-                Optionally, you can use the `--everything` flag for generating mutations for "covered" classes, but this is not recommended as it will slow down the mutation testing process.
-                ERROR);
+            $this->output->writeln($content);
+
+            $this->output->writeln(['', '  <bg=cyan> INFO </> Optionally, you can use the `--everything` flag for generating mutations for "covered" classes, but this is not recommended as it will slow down the mutation testing process.', '']);
+
+            return 1;
         }
 
         return $mutationTestRunner->run();
