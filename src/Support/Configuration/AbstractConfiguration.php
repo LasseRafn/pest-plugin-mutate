@@ -54,6 +54,8 @@ abstract class AbstractConfiguration implements ConfigurationContract
 
     private ?string $mutationId = null;
 
+    private ?bool $everything = null;
+
     /**
      * {@inheritDoc}
      */
@@ -175,8 +177,15 @@ abstract class AbstractConfiguration implements ConfigurationContract
         return $this;
     }
 
+    public function everything(): self
+    {
+        $this->everything = true;
+
+        return $this;
+    }
+
     /**
-     * @return array{paths?: string[], paths_to_ignore?: string[], mutators?: class-string<Mutator>[], excluded_mutators?: class-string<Mutator>[], classes?: string[], parallel?: bool, processes?: int, profile?: bool, min_score?: float, ignore_min_score_on_zero_mutations?: bool, covered_only?: bool, stop_on_untested?: bool, stop_on_uncovered?: bool, mutation_id?: string, retry?: bool}
+     * @return array{paths?: string[], paths_to_ignore?: string[], mutators?: class-string<Mutator>[], excluded_mutators?: class-string<Mutator>[], classes?: string[], parallel?: bool, processes?: int, profile?: bool, min_score?: float, ignore_min_score_on_zero_mutations?: bool, covered_only?: bool, stop_on_untested?: bool, stop_on_uncovered?: bool, mutation_id?: string, retry?: bool, everything?: bool}
      */
     public function toArray(): array
     {
@@ -195,6 +204,7 @@ abstract class AbstractConfiguration implements ConfigurationContract
             'stop_on_uncovered' => $this->stopOnUncovered,
             'mutation_id' => $this->mutationId,
             'retry' => $this->retry,
+            'everything' => $this->everything,
         ], fn (mixed $value): bool => ! is_null($value));
     }
 

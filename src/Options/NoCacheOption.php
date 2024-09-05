@@ -6,9 +6,9 @@ namespace Pest\Mutate\Options;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class ClearCache
+class NoCacheOption
 {
-    final public const ARGUMENT = 'clear-cache';
+    final public const ARGUMENT = 'no-cache';
 
     public static function remove(): bool
     {

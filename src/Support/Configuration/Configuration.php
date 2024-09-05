@@ -29,5 +29,6 @@ class Configuration
         public readonly bool $stopOnUncovered,
         public readonly ?string $mutationId,
         public readonly bool $retry,
+        public readonly bool $everything,
     ) {}
 }

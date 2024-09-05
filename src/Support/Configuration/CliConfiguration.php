@@ -7,7 +7,8 @@ namespace Pest\Mutate\Support\Configuration;
 use Pest\Mutate\Cache\NullStore;
 use Pest\Mutate\Options\BailOption;
 use Pest\Mutate\Options\ClassOption;
-use Pest\Mutate\Options\ClearCache;
+use Pest\Mutate\Options\ClearCacheOption;
+use Pest\Mutate\Options\EverythingOption;
 use Pest\Mutate\Options\ExceptOption;
 use Pest\Mutate\Options\IgnoreMinScoreOnZeroMutationsOption;
 use Pest\Mutate\Options\IgnoreOption;
@@ -15,7 +16,7 @@ use Pest\Mutate\Options\MinScoreOption;
 use Pest\Mutate\Options\MutateOption;
 use Pest\Mutate\Options\MutationIdOption;
 use Pest\Mutate\Options\MutatorsOption;
-use Pest\Mutate\Options\NoCache;
+use Pest\Mutate\Options\NoCacheOption;
 use Pest\Mutate\Options\ParallelOption;
 use Pest\Mutate\Options\PathOption;
 use Pest\Mutate\Options\ProcessesOption;
@@ -47,8 +48,9 @@ class CliConfiguration extends AbstractConfiguration
         BailOption::class,
         RetryOption::class,
         MutationIdOption::class,
-        NoCache::class,
-        ClearCache::class,
+        NoCacheOption::class,
+        ClearCacheOption::class,
+        EverythingOption::class,
     ];
 
     /**
@@ -140,12 +142,16 @@ class CliConfiguration extends AbstractConfiguration
             $this->mutationId((string) $input->getOption(MutationIdOption::ARGUMENT)); // @phpstan-ignore-line
         }
 
-        if ($input->hasOption(NoCache::ARGUMENT)) {
+        if ($input->hasOption(NoCacheOption::ARGUMENT)) {
             Container::getInstance()->add(CacheInterface::class, new NullStore);
         }
 
-        if ($input->hasOption(ClearCache::ARGUMENT)) {
+        if ($input->hasOption(ClearCacheOption::ARGUMENT)) {
             Container::getInstance()->get(CacheInterface::class)->clear(); // @phpstan-ignore-line
+        }
+
+        if ($input->hasOption(EverythingOption::ARGUMENT)) {
+            $this->everything();
         }
 
         return $arguments;

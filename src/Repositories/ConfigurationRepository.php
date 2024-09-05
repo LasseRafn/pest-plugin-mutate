@@ -108,6 +108,7 @@ class ConfigurationRepository
             stopOnUncovered: $config['stop_on_uncovered'] ?? false,
             mutationId: $config['mutation_id'] ?? null,
             retry: $config['retry'] ?? false,
+            everything: $config['everything'] ?? false,
         );
     }
 

@@ -8,6 +8,7 @@ use Pest\Contracts\Bootstrapper;
 use Pest\Contracts\Plugins\AddsOutput;
 use Pest\Contracts\Plugins\Bootable;
 use Pest\Contracts\Plugins\HandlesArguments;
+use Pest\Exceptions\InvalidOption;
 use Pest\Mutate\Boostrappers\BootPhpUnitSubscribers;
 use Pest\Mutate\Boostrappers\BootSubscribers;
 use Pest\Mutate\Cache\FileStore;
@@ -37,6 +38,7 @@ use Pest\Mutate\Subscribers\PrinterSubscriber;
 use Pest\Mutate\Support\Printers\DefaultPrinter;
 use Pest\Mutate\Support\StreamWrapper;
 use Pest\Plugins\Concerns\HandleArguments;
+use Pest\Plugins\Only;
 use Pest\Plugins\Parallel;
 use Pest\Support\Container;
 use Pest\Support\Coverage;
@@ -115,16 +117,18 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             $arguments = $this->popArgument('--mutate', $arguments);
         }
 
+        if (Coverage::isAvailable() && ! isset($_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE'])) {
+            throw new InvalidOption('Mutation testing requires code coverage to be enabled. You can find more about code coverage in the Pest documentation.');
+        }
+
         $mutationTestRunner->enable();
         $this->ensurePrinterIsRegistered();
 
-        if (Coverage::isAvailable()) {
-            $coverageRequired = array_filter($arguments, fn (string $argument): bool => str_starts_with($argument, '--coverage')) !== [];
-            if ($coverageRequired) {
-                $mutationTestRunner->doNotDisableCodeCoverage();
-            } else {
-                $arguments[] = '--coverage-php='.Coverage::getPath();
-            }
+        $coverageRequired = array_filter($arguments, fn (string $argument): bool => str_starts_with($argument, '--coverage')) !== [];
+        if ($coverageRequired) {
+            $mutationTestRunner->doNotDisableCodeCoverage();
+        } else {
+            $arguments[] = '--coverage-php='.Coverage::getPath();
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
@@ -146,6 +150,27 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
 
         if (isset($_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE']) && $_SERVER['PEST_PLUGIN_INTERNAL_TEST_SUITE'] === 1) {
             return $exitCode;
+        }
+
+        /** @var ConfigurationRepository $configuration */
+        $configuration = Container::getInstance()->get(ConfigurationRepository::class);
+
+        if (! Only::isEnabled() && ! $configuration->everything) {
+            throw new InvalidOption(<<<'ERROR'
+                Mutation testing requires the usage of the `covers()` function. Here is an example:
+
+                ```
+                <?php
+
+                covers(TodoController::class); // mutations will be generated only for this class
+
+                it('list todos', function () {
+                    // your test here...
+                });
+                ```
+
+                Optionally, you can use the `--everything` flag for generating mutations for "covered" classes, but this is not recommended as it will slow down the mutation testing process.
+                ERROR);
         }
 
         return $mutationTestRunner->run();
