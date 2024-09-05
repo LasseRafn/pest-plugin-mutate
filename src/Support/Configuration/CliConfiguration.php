@@ -8,6 +8,7 @@ use Pest\Mutate\Cache\NullStore;
 use Pest\Mutate\Options\BailOption;
 use Pest\Mutate\Options\ClassOption;
 use Pest\Mutate\Options\ClearCacheOption;
+use Pest\Mutate\Options\CoveredOnlyOption;
 use Pest\Mutate\Options\EverythingOption;
 use Pest\Mutate\Options\ExceptOption;
 use Pest\Mutate\Options\IgnoreMinScoreOnZeroMutationsOption;
@@ -51,6 +52,7 @@ class CliConfiguration extends AbstractConfiguration
         NoCacheOption::class,
         ClearCacheOption::class,
         EverythingOption::class,
+        CoveredOnlyOption::class,
     ];
 
     /**
@@ -92,6 +94,10 @@ class CliConfiguration extends AbstractConfiguration
 
         if ($input->hasOption(ExceptOption::ARGUMENT)) {
             $this->except(explode(',', (string) $input->getOption(ExceptOption::ARGUMENT))); // @phpstan-ignore-line
+        }
+
+        if ($input->hasOption(CoveredOnlyOption::ARGUMENT)) {
+            $this->coveredOnly($input->getOption(CoveredOnlyOption::ARGUMENT) !== 'false');
         }
 
         if ($input->hasOption(MinScoreOption::ARGUMENT)) {

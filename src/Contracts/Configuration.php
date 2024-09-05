@@ -30,6 +30,8 @@ interface Configuration
 
     public function ignoreMinScoreOnZeroMutations(bool $ignore = true): self;
 
+    public function coveredOnly(bool $coveredOnly = true): self;
+
     public function parallel(bool $parallel = true): self;
 
     public function processes(?int $processes = null): self;

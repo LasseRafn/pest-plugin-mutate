@@ -39,6 +39,24 @@ it('sets the paths to ignore if --ignore argument is passed', function (): void 
         ->paths_to_ignore->toEqual(['src/path-1', 'src/path-2']);
 });
 
+it('enables covered only option if --covered-only argument is passed', function (): void {
+    $this->configuration->fromArguments(['--mutate='.ConfigurationRepository::FAKE]);
+    expect($this->configuration->toArray())
+        ->covered_only->toBeNull();
+
+    $this->configuration->fromArguments(['--covered-only']);
+    expect($this->configuration->toArray())
+        ->covered_only->toBeTrue();
+
+    $this->configuration->fromArguments(['--covered-only=true']);
+    expect($this->configuration->toArray())
+        ->covered_only->toBeTrue();
+
+    $this->configuration->fromArguments(['--covered-only=false']);
+    expect($this->configuration->toArray())
+        ->covered_only->toBeFalse();
+});
+
 it('sets the mutators if --mutators argument is passed', function (): void {
     $this->configuration->fromArguments(['--mutator=SetArithmetic']);
     expect($this->configuration->toArray())

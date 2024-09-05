@@ -17,6 +17,11 @@ abstract class AbstractConfiguration implements ConfigurationContract
     private ?array $paths = null;
 
     /**
+     * @var bool
+     */
+    private ?bool $coveredOnly = null;
+
+    /**
      * @var string[]|null
      */
     private ?array $pathsToIgnore = null;
@@ -114,6 +119,13 @@ abstract class AbstractConfiguration implements ConfigurationContract
         return $this;
     }
 
+    public function coveredOnly(bool $coveredOnly = true): self
+    {
+        $this->coveredOnly = $coveredOnly;
+
+        return $this;
+    }
+
     public function parallel(bool $parallel = true): self
     {
         $this->parallel = $parallel;
@@ -185,11 +197,12 @@ abstract class AbstractConfiguration implements ConfigurationContract
     }
 
     /**
-     * @return array{paths?: string[], paths_to_ignore?: string[], mutators?: class-string<Mutator>[], excluded_mutators?: class-string<Mutator>[], classes?: string[], parallel?: bool, processes?: int, profile?: bool, min_score?: float, ignore_min_score_on_zero_mutations?: bool, covered_only?: bool, stop_on_untested?: bool, stop_on_uncovered?: bool, mutation_id?: string, retry?: bool, everything?: bool}
+     * @return array{covered_only?: bool, paths?: string[], paths_to_ignore?: string[], mutators?: class-string<Mutator>[], excluded_mutators?: class-string<Mutator>[], classes?: string[], parallel?: bool, processes?: int, profile?: bool, min_score?: float, ignore_min_score_on_zero_mutations?: bool, covered_only?: bool, stop_on_untested?: bool, stop_on_uncovered?: bool, mutation_id?: string, retry?: bool, everything?: bool}
      */
     public function toArray(): array
     {
         return array_filter([
+            'covered_only' => $this->coveredOnly,
             'paths' => $this->paths,
             'paths_to_ignore' => $this->pathsToIgnore,
             'mutators' => $this->mutators !== null ? array_values(array_diff($this->mutators, $this->excludedMutators ?? [])) : null,
