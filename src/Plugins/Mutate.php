@@ -180,7 +180,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
                 '  <fg=gray>pest --mutate --parallel --everything --covered-only</>',
             ]);
 
-            $this->output->writeln(['', '  However, we recommend using the `covers()` function for better performance, and keep tracking of your mutation testing score.', '']);
+            $this->output->writeln(['', '  However, we recommend using the `covers()` function for better performance, and keep tracking of your mutation testing score over time.']);
 
             return 1;
         }
