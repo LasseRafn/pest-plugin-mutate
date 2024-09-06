@@ -98,7 +98,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             $bootstrapper->boot();
         }
 
-        $this->container->add(CacheInterface::class, new FileStore);
+        $this->container->add(CacheInterface::class, new FileStore(dirname(__DIR__, 2).'/.temp/pest-mutate-cache'));
     }
 
     /**
