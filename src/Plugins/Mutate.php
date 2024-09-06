@@ -156,7 +156,9 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         $configurationRepository = Container::getInstance()->get(ConfigurationRepository::class);
         $configuration = $configurationRepository->mergedConfiguration();
 
-        if ($configuration->classes === [] && ! $configuration->everything) {
+        $paths = $configurationRepository->cliConfiguration->toArray()['paths'] ?? false;
+
+        if (! is_array($paths) && $configuration->classes === [] && ! $configuration->everything) {
             $this->output->writeln(['  <bg=red> ERROR </> Mutation testing requires the usage of the `covers()` function. Here is an example:', '']);
 
             $highlighter = new Highlighter;
@@ -170,7 +172,15 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
 
             $this->output->writeln($content);
 
-            $this->output->writeln(['', '  <bg=cyan> INFO </> Optionally, you can use the `pest --everything --covered-only` flags for generating mutations for "covered" classes, but this is not recommended as it will slow down the mutation testing process.', '']);
+            $this->output->writeln(['', '  <bg=cyan> INFO </> Optionally, you can use mutation testing with our filters:', '']);
+
+            $this->output->writeln([
+                '  <fg=gray>pest --mutate --parallel --path=app/Models</>',
+                '  <fg=gray>pest --mutate --parallel --class=App\\Models</>',
+                '  <fg=gray>pest --mutate --parallel --everything --covered-only</>',
+            ]);
+
+            $this->output->writeln(['', '  However, we recommend using the `covers()` function for better performance, and keep tracking of your mutation testing score.', '']);
 
             return 1;
         }
