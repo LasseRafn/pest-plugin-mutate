@@ -95,15 +95,14 @@ class DefaultPrinter implements Printer
     public function reportScoreNotReached(float $scoreReached, float $scoreRequired): void
     {
         $this->output->writeln([
-            '',
-            '  <fg=white;bg=red;options=bold> FAIL </> Mutation score below expected:<fg=red;options=bold> '.number_format($scoreReached, 1).' %</>. Minimum:<fg=gray;options=bold> '.number_format($scoreRequired, 1).' %</>.',
+            '  <fg=white;bg=red;options=bold> FAIL </> <fg=gray>Mutation score below expected:</><fg=red;options=bold> '.number_format($scoreReached, 1).' %</><fg=gray>. Minimum: </><options=bold>'.number_format($scoreRequired, 1).' %</><fg=gray>.</>',
             '',
         ]);
     }
 
     public function reportMutationGenerationStarted(MutationSuite $mutationSuite): void
     {
-        $this->output->writeln('  Re-running test suite for each mutation...');
+        $this->output->writeln('  Mutating application files...');
     }
 
     public function reportMutationGenerationFinished(MutationSuite $mutationSuite): void
@@ -133,8 +132,6 @@ class DefaultPrinter implements Printer
         $this->writeMutationSuiteSummary($mutationSuite);
 
         $this->output->writeln([
-            '',
-            '',
             '  <fg=gray>Mutations:</> <fg=default>'.($mutationSuite->repository->untested() !== 0 ? '<fg=red;options=bold>'.$mutationSuite->repository->untested().' untested</><fg=gray>,</> ' : '').($mutationSuite->repository->uncovered() !== 0 ? '<fg=yellow;options=bold>'.$mutationSuite->repository->uncovered().' uncovered</><fg=gray>,</> ' : '').($mutationSuite->repository->notRun() !== 0 ? '<fg=yellow;options=bold>'.$mutationSuite->repository->notRun().' pending</><fg=gray>,</> ' : '').($mutationSuite->repository->timedOut() !== 0 ? '<fg=green;options=bold>'.$mutationSuite->repository->timedOut().' timeout</><fg=gray>,</> ' : '').'<fg=green;options=bold>'.$mutationSuite->repository->tested().' tested</>',
         ]);
 
@@ -189,7 +186,7 @@ class DefaultPrinter implements Printer
         $path = str_ireplace(getcwd().'/', '', $test->mutation->file->getRealPath());
 
         render(<<<'HTML'
-                        <div class="mx-2 mt-1 flex">
+                        <div class="mx-2 flex">
                             <span class="flex-1 content-repeat-[-] text-red"></span>
                         </div>
                     HTML
@@ -198,16 +195,13 @@ class DefaultPrinter implements Printer
         if ($test->result() === MutationTestResult::Untested) {
             $color = 'red';
             $label = 'UNTESTED';
-            $error = 'Test suite does not test this line correctly';
         } else {
-            $color = 'red';
+            $color = 'bright-red';
             $label = 'UNCOVERED';
-            $error = 'Test suite does not cover this line';
         }
 
         $this->output->writeln([
             '  <fg=default;bg='.$color.';options=bold> '.$label.' </> <fg=default;options=bold>'.$path.' <fg=gray> > Line '.$test->mutation->startLine.': '.$test->mutation->mutator::name().' - ID: '.$test->getId().'</>', // @pest-mutate-ignore
-            '  <fg=default;options=bold>'.$error.'</>',
         ]);
 
         $diff = $test->mutation->diff;
