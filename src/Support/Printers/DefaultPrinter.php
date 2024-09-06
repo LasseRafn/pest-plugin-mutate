@@ -198,11 +198,11 @@ class DefaultPrinter implements Printer
         if ($test->result() === MutationTestResult::Untested) {
             $color = 'red';
             $label = 'UNTESTED';
-            $error = 'Test suite passed without detecting the mutated code.';
+            $error = 'Test suite does not test this line correctly';
         } else {
-            $color = 'yellow';
-            $label = 'UNTESTED';
-            $error = 'Test suite passed without detecting and executing the mutated code.';
+            $color = 'red';
+            $label = 'UNCOVERED';
+            $error = 'Test suite does not cover this line';
         }
 
         $this->output->writeln([
