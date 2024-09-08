@@ -50,13 +50,6 @@
             "pestphp/pest-plugin": true
         }
     },
-    "extra": {
-        "pest": {
-            "plugins": [
-                "Pest\\Mutate\\Plugins\\Mutate"
-            ]
-        }
-    },
     "scripts": {
         "refacto": "rector",
         "lint": "pint",
