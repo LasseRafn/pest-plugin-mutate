@@ -225,27 +225,11 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
                 }
             },
 
-            new class($this->logger) extends LoggerSubscriber implements TestedSubscriber
-            {
-                public function notify(Tested $event): void
-                {
-                    $this->logger()->reportTestedMutation($event->test);
-                }
-            },
-
             new class($printer) extends PrinterSubscriber implements UntestedSubscriber
             {
                 public function notify(Untested $event): void
                 {
                     $this->printer()->reportUntestedMutation($event->test);
-                }
-            },
-
-            new class($this->logger) extends LoggerSubscriber implements UntestedSubscriber
-            {
-                public function notify(Untested $event): void
-                {
-                    $this->logger()->reportUntestedMutation($event->test);
                 }
             },
 
@@ -257,27 +241,11 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
                 }
             },
 
-            new class($this->logger) extends LoggerSubscriber implements TimeoutSubscriber
-            {
-                public function notify(Timeout $event): void
-                {
-                    $this->logger()->reportTimedOutMutation($event->test);
-                }
-            },
-
             new class($printer) extends PrinterSubscriber implements UncoveredSubscriber
             {
                 public function notify(Uncovered $event): void
                 {
                     $this->printer()->reportUncoveredMutation($event->test);
-                }
-            },
-
-            new class($this->logger) extends LoggerSubscriber implements UncoveredSubscriber
-            {
-                public function notify(Uncovered $event): void
-                {
-                    $this->logger()->reportUncoveredMutation($event->test);
                 }
             },
 
@@ -311,6 +279,39 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
                 public function notify(FinishMutationSuite $event): void
                 {
                     $this->printer()->reportMutationSuiteFinished($event->mutationSuite);
+                }
+            },
+
+            // Logging
+            new class($this->logger) extends LoggerSubscriber implements TestedSubscriber
+            {
+                public function notify(Tested $event): void
+                {
+                    $this->logger()->reportTestedMutation($event->test);
+                }
+            },
+
+            new class($this->logger) extends LoggerSubscriber implements UntestedSubscriber
+            {
+                public function notify(Untested $event): void
+                {
+                    $this->logger()->reportUntestedMutation($event->test);
+                }
+            },
+
+            new class($this->logger) extends LoggerSubscriber implements TimeoutSubscriber
+            {
+                public function notify(Timeout $event): void
+                {
+                    $this->logger()->reportTimedOutMutation($event->test);
+                }
+            },
+
+            new class($this->logger) extends LoggerSubscriber implements UncoveredSubscriber
+            {
+                public function notify(Uncovered $event): void
+                {
+                    $this->logger()->reportUncoveredMutation($event->test);
                 }
             },
 
