@@ -287,7 +287,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Tested $event): void
                 {
-                    $this->logger()->reportTestedMutation($event->test);
+                    $this->logger()->pushTestedMutation($event->test);
                 }
             },
 
@@ -295,7 +295,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Untested $event): void
                 {
-                    $this->logger()->reportUntestedMutation($event->test);
+                    $this->logger()->pushUntestedMutation($event->test);
                 }
             },
 
@@ -303,7 +303,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Timeout $event): void
                 {
-                    $this->logger()->reportTimedOutMutation($event->test);
+                    $this->logger()->pushTimedOutMutation($event->test);
                 }
             },
 
@@ -311,7 +311,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Uncovered $event): void
                 {
-                    $this->logger()->reportUncoveredMutation($event->test);
+                    $this->logger()->pushUncoveredMutation($event->test);
                 }
             },
 
@@ -319,7 +319,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(FinishMutationSuite $event): void
                 {
-                    $this->logger()->reportMutationSuiteFinished($event->mutationSuite);
+                    $this->logger()->mutationSuiteFinished($event->mutationSuite);
                 }
             },
         ];
