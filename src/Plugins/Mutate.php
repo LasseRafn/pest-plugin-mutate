@@ -44,6 +44,9 @@ use Pest\Support\Container;
 use Pest\Support\Coverage;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Pest\Mutate\Logging\JsonLogger;
+use Pest\Mutate\Contracts\Logger;
+use Pest\Mutate\Logging\NullLogger;
 
 /**
  * @internal
@@ -57,6 +60,11 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
     final public const ENV_MUTATION_TESTING = 'PEST_MUTATION_TESTING';
 
     final public const ENV_MUTATION_FILE = 'PEST_MUTATION_FILE';
+    
+    /**
+     * The logger used to output mutation metrics to a file.
+     */
+    private Logger $logger;
 
     /**
      * The Kernel bootstrappers.
@@ -75,7 +83,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         private readonly Container $container,
         private readonly OutputInterface $output,
     ) {
-        //
+        $this->logger = new NullLogger('', []);
     }
 
     public function boot(): void
@@ -129,6 +137,10 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             $mutationTestRunner->doNotDisableCodeCoverage();
         } else {
             $arguments[] = '--coverage-php='.Coverage::getPath();
+        }
+        
+        if ($this->hasArgument('--output-json', $arguments)) {
+            $this->logger = new JsonLogger(explode('=', array_flip($arguments)['--output-json'])[1], ['test' => true]);
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
@@ -199,6 +211,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(BeforeFirstTestExecuted $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->printFilename($event->testCollection);
                 }
             },
@@ -208,6 +221,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Tested $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportTestedMutation($event->test);
                 }
             },
@@ -216,6 +230,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Untested $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportUntestedMutation($event->test);
                 }
             },
@@ -224,6 +239,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Timeout $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportTimedOutMutation($event->test);
                 }
             },
@@ -232,6 +248,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(Uncovered $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportUncoveredMutation($event->test);
                 }
             },
@@ -241,6 +258,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(StartMutationGeneration $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportMutationGenerationStarted($event->mutationSuite);
                 }
             },
@@ -249,6 +267,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(FinishMutationGeneration $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportMutationGenerationFinished($event->mutationSuite);
                 }
             },
@@ -257,6 +276,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(StartMutationSuite $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportMutationSuiteStarted($event->mutationSuite);
                 }
             },
@@ -265,6 +285,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             {
                 public function notify(FinishMutationSuite $event): void
                 {
+                    $this->logger->a($event);
                     $this->printer()->reportMutationSuiteFinished($event->mutationSuite);
                 }
             },
