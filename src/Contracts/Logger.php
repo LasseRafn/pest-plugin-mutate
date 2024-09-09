@@ -29,6 +29,4 @@
      public function pushUncoveredMutation( MutationTest $mutationTest ): void;
 
      public function mutationSuiteFinished( MutationSuite $mutationSuite ): void;
-
-     public function output():void;
  }
