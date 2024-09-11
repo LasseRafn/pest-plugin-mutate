@@ -84,7 +84,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         private readonly Container $container,
         private readonly OutputInterface $output,
     ) {
-        $this->logger = new NullLogger('', []);
+        $this->logger = new NullLogger();
     }
 
     public function boot(): void
@@ -141,7 +141,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         }
 
         if ($this->hasArgument('--output-json', $arguments)) {
-            $this->logger = new JsonLogger(explode('=', array_flip($arguments)['--output-json'])[1], ['test' => true]);
+            $this->logger = new JsonLogger(explode('=', array_flip($arguments)['--output-json'])[1]);
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
@@ -283,38 +283,6 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             },
 
             // Logging
-            new class($this->logger) extends LoggerSubscriber implements TestedSubscriber
-            {
-                public function notify(Tested $event): void
-                {
-                    $this->logger()->pushTestedMutation($event->test);
-                }
-            },
-
-            new class($this->logger) extends LoggerSubscriber implements UntestedSubscriber
-            {
-                public function notify(Untested $event): void
-                {
-                    $this->logger()->pushUntestedMutation($event->test);
-                }
-            },
-
-            new class($this->logger) extends LoggerSubscriber implements TimeoutSubscriber
-            {
-                public function notify(Timeout $event): void
-                {
-                    $this->logger()->pushTimedOutMutation($event->test);
-                }
-            },
-
-            new class($this->logger) extends LoggerSubscriber implements UncoveredSubscriber
-            {
-                public function notify(Uncovered $event): void
-                {
-                    $this->logger()->pushUncoveredMutation($event->test);
-                }
-            },
-
             new class($this->logger) extends LoggerSubscriber implements FinishMutationSuiteSubscriber
             {
                 public function notify(FinishMutationSuite $event): void

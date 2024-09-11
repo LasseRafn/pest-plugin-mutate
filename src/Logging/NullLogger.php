@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace Pest\Mutate\Logging;
 
 use Pest\Mutate\Contracts\Logger;
+use Pest\Mutate\MutationSuite;
 
 /**
  * @internal
@@ -15,20 +16,13 @@ class NullLogger implements Logger
 {
     /**
      * @param string $outputPath
-     * @param array<string, string|float|int|null>  $pluginSettings
      */
-    public function __construct( string $outputPath, array $pluginSettings )
+    public function __construct( string $outputPath = '' )
     {
         //
     }
 
-    public function append(string $path, array $uncoveredLines, array $uncoveredLinesIgnored, float $percentage):void
-    {
-        //
-    }
-
-    public function output(): void
-    {
+    public function mutationSuiteFinished( MutationSuite $mutationSuite ): void {
         //
     }
 }
