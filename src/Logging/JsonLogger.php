@@ -25,9 +25,9 @@ class JsonLogger implements Logger
     {
         $json = json_encode( [
             'format'  => 'pest',
-            'results' => array_map( function ( $testCollection ) {
+            'results' => array_values( array_map( function ( $testCollection ) {
                 return [
-                    'path'            => $testCollection->file->getPath(),
+                    'path'            => $testCollection->file->getRealPath(),
                     'count_total'     => $testCollection->count(),
                     'count_not_run'   => $testCollection->notRun(),
                     'count_timed_out' => $testCollection->timedOut(),
@@ -36,7 +36,7 @@ class JsonLogger implements Logger
                     'tests'           => array_map( function ( $test ) {
                         return [
                             'id'       => $test->getId(),
-                            'duration' => $test->duration(),
+                            'duration' => round( $test->duration(), 4 ),
                             'result'   => $test->result()->value,
                             'mutation' => [
                                 'id'         => $test->mutation->id,
@@ -47,9 +47,9 @@ class JsonLogger implements Logger
                         ];
                     }, $testCollection->tests() )
                 ];
-            }, $mutationSuite->repository->all() ),
+            }, $mutationSuite->repository->all() ) ),
             'stats'   => [
-                'duration' => round($mutationSuite->duration(), 3),
+                'duration' => round( $mutationSuite->duration(), 4 ),
                 'score'    => $mutationSuite->repository->score(),
                 'tests'    => [
                     'count_total'     => $mutationSuite->repository->count(),

@@ -130,6 +130,13 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             throw new InvalidOption('Mutation testing requires code coverage to be enabled. You can find more about code coverage in the Pest documentation.');
         }
 
+        foreach ($arguments as $argIndex => $arg) {
+            if (str_starts_with((string) $arg, "--mutate-output-json=")) { // @phpstan-ignore-linereturn true;
+                $this->logger = new JsonLogger(explode('=', $arg)[1]);
+                unset($arguments[$argIndex]);
+            }
+        }
+
         $mutationTestRunner->enable();
         $this->ensurePrinterIsRegistered();
 
@@ -140,12 +147,8 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             $arguments[] = '--coverage-php='.Coverage::getPath();
         }
 
-        if ($this->hasArgument('--mutate-output-json', $arguments)) {
-            $this->logger = new JsonLogger(explode('=', array_flip($arguments)['--mutate-output-json'])[1]);
-        }
-
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
-            ->cliConfiguration->fromArguments($arguments);
+        ->cliConfiguration->fromArguments($arguments);
 
         $mutationTestRunner->setOriginalArguments($arguments);
 
