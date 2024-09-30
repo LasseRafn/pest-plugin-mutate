@@ -140,7 +140,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
             $arguments[] = '--coverage-php='.Coverage::getPath();
         }
 
-        if ($this->hasArgument('--output-json', $arguments)) {
+        if ($this->hasArgument('--mutate-output-json', $arguments)) {
             $this->logger = new JsonLogger(explode('=', array_flip($arguments)['--output-json'])[1]);
         }
 

@@ -8,57 +8,58 @@ use Pest\Mutate\Contracts\Logger;
 use Pest\Mutate\MutationSuite;
 
 /**
-* @internal
-*
-* @final
-*/
+ * @internal
+ *
+ * @final
+ */
 class JsonLogger implements Logger
 {
-   private string $outputPath;
+    private string $outputPath;
 
-   public function __construct( string $outputPath ) {
-       $this->outputPath = $outputPath;
-   }
+    public function __construct( string $outputPath )
+    {
+        $this->outputPath = $outputPath;
+    }
 
-    public function mutationSuiteFinished( MutationSuite $mutationSuite ): void {
+    public function mutationSuiteFinished( MutationSuite $mutationSuite ): void
+    {
         $json = json_encode( [
-            'format'   => 'pest',
-            'results' => array_map(function($testCollection) {
+            'format'  => 'pest',
+            'results' => array_map( function ( $testCollection ) {
                 return [
-                    'path' => $testCollection->file->getRealPath(),
-                    'count_total' => $testCollection->count(),
-                    'count_not_run' => $testCollection->notRun(),
+                    'path'            => $testCollection->file->getPath(),
+                    'count_total'     => $testCollection->count(),
+                    'count_not_run'   => $testCollection->notRun(),
                     'count_timed_out' => $testCollection->timedOut(),
                     'count_uncovered' => $testCollection->uncovered(),
-                    'count_untested' => $testCollection->untested(),
-                    'tests' => array_map(function($test) {
+                    'count_untested'  => $testCollection->untested(),
+                    'tests'           => array_map( function ( $test ) {
                         return [
-                            'id' => $test->getId(),
+                            'id'       => $test->getId(),
                             'duration' => $test->duration(),
-                            'result' => $test->result()->value,
+                            'result'   => $test->result()->value,
                             'mutation' => [
-                                'id' =>$test->mutation->id,
-                                'mutator' =>$test->mutation->mutator,
-                                'start_line' =>$test->mutation->startLine,
-                                'end_line' =>$test->mutation->endLine,
-                           ],
+                                'id'         => $test->mutation->id,
+                                'mutator'    => $test->mutation->mutator,
+                                'start_line' => $test->mutation->startLine,
+                                'end_line'   => $test->mutation->endLine,
+                            ],
                         ];
-                    }, $testCollection->tests())
+                    }, $testCollection->tests() )
                 ];
-            }, $mutationSuite->repository->all()),
-            'stats' => [
-                'duration' => $mutationSuite->duration(),
-                'score' => $mutationSuite->repository->score(),
-                'tests' => [
-                    'count_total' => $mutationSuite->repository->count(),
-                    'count_not_run' => $mutationSuite->repository->notRun(),
+            }, $mutationSuite->repository->all() ),
+            'stats'   => [
+                'duration' => round($mutationSuite->duration(), 3),
+                'score'    => $mutationSuite->repository->score(),
+                'tests'    => [
+                    'count_total'     => $mutationSuite->repository->count(),
+                    'count_not_run'   => $mutationSuite->repository->notRun(),
                     'count_timed_out' => $mutationSuite->repository->timedOut(),
                     'count_uncovered' => $mutationSuite->repository->uncovered(),
-                    'count_untested' => $mutationSuite->repository->untested(),
+                    'count_untested'  => $mutationSuite->repository->untested(),
                 ],
             ],
-            $mutationSuite->repository->notRun()
         ], JSON_THROW_ON_ERROR );
-        file_put_contents($this->outputPath, $json);
+        file_put_contents( $this->outputPath, $json );
     }
 }
