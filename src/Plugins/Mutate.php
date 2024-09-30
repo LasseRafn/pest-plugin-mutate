@@ -141,7 +141,7 @@ class Mutate implements AddsOutput, Bootable, HandlesArguments
         }
 
         if ($this->hasArgument('--mutate-output-json', $arguments)) {
-            $this->logger = new JsonLogger(explode('=', array_flip($arguments)['--output-json'])[1]);
+            $this->logger = new JsonLogger(explode('=', array_flip($arguments)['--mutate-output-json'])[1]);
         }
 
         $arguments = Container::getInstance()->get(ConfigurationRepository::class) // @phpstan-ignore-line
